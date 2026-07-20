@@ -11,6 +11,7 @@ export default function LoginPage() {
       try{
         setLoading(true);
     const res = await axios.post("/auth/login", data)
+    localStorage.setItem("token", res.data.token);
     console.log(res)
     toast.success("Logged in successfully")
     navigate("/")

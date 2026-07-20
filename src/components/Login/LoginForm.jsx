@@ -50,7 +50,7 @@ export default function LoginForm({onSubmit,loading}) {
               stroke-width="2"
               stroke-linecap="round"
               stroke-linejoin="round"
-              class="lucide lucide-mail absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"
+              className="lucide lucide-mail absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"
               aria-hidden="true"
             >
               <path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"></path>
@@ -85,7 +85,7 @@ export default function LoginForm({onSubmit,loading}) {
               stroke-width="2"
               stroke-linejoin="round"
               stroke-linejoin="round"
-              class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"
+              className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"
               aria-hidden="true"
             >
               <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
