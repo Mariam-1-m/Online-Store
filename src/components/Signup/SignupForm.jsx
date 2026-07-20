@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 
-export default function SignupForm({onSubmit}) {
+export default function SignupForm({onSubmit,loading}) {
 
   const { register, handleSubmit, formState: { errors } } = useForm();
       
@@ -147,8 +147,15 @@ export default function SignupForm({onSubmit}) {
             )}
         </div>
 
-        <button  type="submit" className="inline-flex items-center justify-center font-medium rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed bg-violet-600 dark:bg-blue-800 dark:hover:bg-blue-900 dark:active:bg-blue-950 text-white hover:bg-violet-700 active:bg-violet-800 px-6 py-3 text-base w-full">
-          Create Account
+        <button disabled={loading} type="submit" className="inline-flex items-center justify-center font-medium rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed bg-violet-600 dark:bg-blue-800 dark:hover:bg-blue-900 dark:active:bg-blue-950 text-white hover:bg-violet-700 active:bg-violet-800 px-6 py-3 text-base w-full">
+          {loading? (
+          <div className="flex items-center gap-2.5">
+          <div className="w-4.5 h-4.5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>  
+          <span>Create Account</span>
+          </div>
+          ): (
+           <span>Create Account</span>
+          )}
         </button>
 
         <p className="text-center text-sm text-slate-500">
