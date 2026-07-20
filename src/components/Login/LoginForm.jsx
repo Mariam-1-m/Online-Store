@@ -21,7 +21,7 @@ export default function LoginForm({onSubmit,loading}) {
             stroke="currentColor"
             strokeWidth="2"
             strokeLinecap="round"
-            stroke-linejoin="round"
+            strokeLinejoin="round"
             class="lucide lucide-zap w-7 h-7"
             aria-hidden="true"
           >
@@ -50,7 +50,7 @@ export default function LoginForm({onSubmit,loading}) {
               stroke="currentColor"
               strokeWidth="2"
               strokeLinecap="round"
-              stroke-linejoin="round"
+              strokeLinejoin="round"
               className="lucide lucide-mail absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"
               aria-hidden="true"
             >
@@ -84,8 +84,7 @@ export default function LoginForm({onSubmit,loading}) {
               fill="none"
               stroke="currentColor"
               strokeWidth="2"
-              stroke-linejoin="round"
-              stroke-linejoin="round"
+              strokeLinejoin="round"
               className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"
               aria-hidden="true"
             >

@@ -13,9 +13,11 @@ export default function SignupPage() {
     const res = await axios.post("/auth/register/send-otp", data)
     console.log(res)
     toast.success("OTP sent to your email")
-    navigate("/verify-otp")
+    navigate("/verify-otp", {
+      state: {email : data.email}
+    })
     }catch(err){
-        console.log(err.response?.data)
+        toast.error(err.response?.data?.message || "Something went wrong");
     }finally{
       setLoading(false)
     }
