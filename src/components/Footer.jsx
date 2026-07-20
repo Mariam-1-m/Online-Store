@@ -31,9 +31,9 @@ import logoImage from "../assets/logo.png";
                 <h3 className="font-bold">Follow Us</h3>
             <ul className="flex  justify-center gap-3">
                 
-                <li className="size-9  leading-3 flex items-center justify-center rounded-full bg-gray-100 hover:text-indigo-600"><NavLink to="/"><Globe size={16}/></NavLink></li>
-               <li className="size-9  leading-3 flex items-center justify-center rounded-full bg-gray-100 hover:text-indigo-600"><NavLink to="/"><MessageCircle size={16} /></NavLink></li>
-               <li className="size-9  leading-3 flex items-center justify-center rounded-full bg-gray-100 hover:text-indigo-600"><NavLink to="/"><Heart size={16}/></NavLink></li> 
+                <li className="size-9  leading-3 flex items-center dark:text-black justify-center rounded-full bg-gray-100 hover:text-indigo-600"><NavLink to="/"><Globe size={16}/></NavLink></li>
+               <li className="size-9  leading-3 flex items-center dark:text-black justify-center rounded-full bg-gray-100 hover:text-indigo-600"><NavLink to="/"><MessageCircle size={16} /></NavLink></li>
+               <li className="size-9  leading-3 flex items-center dark:text-black justify-center rounded-full bg-gray-100 hover:text-indigo-600"><NavLink to="/"><Heart size={16}/></NavLink></li> 
                
 
             </ul>
