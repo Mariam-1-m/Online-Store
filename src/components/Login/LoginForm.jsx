@@ -8,7 +8,7 @@ export default function LoginForm({onSubmit,loading}) {
   return (
     <div className="min-h-[80vh] flex flex-col justify-center">
       <div className="mb-8 text-center">
-        <a
+        <Link
           href="/"
           className="text-2xl font-bold flex items-center justify-center gap-2 text-violet-700 dark:text-blue-700 mb-2"
         >
@@ -22,13 +22,13 @@ export default function LoginForm({onSubmit,loading}) {
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
-            class="lucide lucide-zap w-7 h-7"
+            className="lucide lucide-zap w-7 h-7"
             aria-hidden="true"
           >
             <path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"></path>
           </svg>
           Koda Store
-        </a>
+        </Link>
 
         <h1 className="text-xl font-semibold text-slate-800 dark:text-slate-200">
           Welcome back
