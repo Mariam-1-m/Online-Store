@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
 
 export default function SignupForm({onSubmit,loading}) {
 
@@ -7,8 +8,8 @@ export default function SignupForm({onSubmit,loading}) {
   return (
     <div className="min-h-[80vh] flex flex-col justify-center">
       <div className="mb-8 text-center">
-        <a
-          href="/"
+        <Link
+          to="/"
           className="text-2xl font-bold flex items-center justify-center gap-2 text-violet-700 dark:text-blue-700 mb-2"
         >
           <svg
@@ -18,8 +19,8 @@ export default function SignupForm({onSubmit,loading}) {
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
+            strokeWidth="2"
+            strokeLinecap="round"
             stroke-linejoin="round"
             className="lucide lucide-zap w-7 h-7"
             aria-hidden="true"
@@ -27,7 +28,7 @@ export default function SignupForm({onSubmit,loading}) {
             <path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"></path>
           </svg>
           Koda Store
-        </a>
+        </Link>
         <h1 className="text-xl font-semibold text-slate-800 dark:text-slate-200">
           Create an account
         </h1>
@@ -48,8 +49,8 @@ export default function SignupForm({onSubmit,loading}) {
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
+              strokeWidth="2"
+              strokeLinecap="round"
               stroke-linejoin="round"
               className="lucide lucide-user absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"
               aria-hidden="true"
@@ -83,8 +84,8 @@ export default function SignupForm({onSubmit,loading}) {
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
+              strokeWidth="2"
+              strokeLinecap="round"
               stroke-linejoin="round"
               className="lucide lucide-mail absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"
               aria-hidden="true"
@@ -119,7 +120,7 @@ export default function SignupForm({onSubmit,loading}) {
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
-              stroke-width="2"
+              strokeWidth="2"
               stroke-linejoin="round"
               stroke-linejoin="round"
               className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"
@@ -160,13 +161,13 @@ export default function SignupForm({onSubmit,loading}) {
 
         <p className="text-center text-sm text-slate-500">
           Already have an account?
-          <a
-            href="/login"
+          <Link
+            to="/login"
             className="text-violet-700 dark:text-blue-700 hover:text-violet-800 dark:hover:text-blue-800 font-medium"
           >
             {" "}
             Sign in
-          </a>
+          </Link>
         </p>
       </form>
     </div>

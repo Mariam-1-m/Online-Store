@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
 
 export default function LoginForm({onSubmit,loading}) {
 
@@ -18,8 +19,8 @@ export default function LoginForm({onSubmit,loading}) {
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
+            strokeWidth="2"
+            strokeLinecap="round"
             stroke-linejoin="round"
             class="lucide lucide-zap w-7 h-7"
             aria-hidden="true"
@@ -47,8 +48,8 @@ export default function LoginForm({onSubmit,loading}) {
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
+              strokeWidth="2"
+              strokeLinecap="round"
               stroke-linejoin="round"
               className="lucide lucide-mail absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"
               aria-hidden="true"
@@ -82,7 +83,7 @@ export default function LoginForm({onSubmit,loading}) {
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
-              stroke-width="2"
+              strokeWidth="2"
               stroke-linejoin="round"
               stroke-linejoin="round"
               className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"
@@ -109,12 +110,12 @@ export default function LoginForm({onSubmit,loading}) {
             )}
         </div>
 
-        <a
-          href="/forgot-password"
+        <Link
+          to="/forgot-password"
           className="text-violet-700 dark:text-blue-800 hover:text-violet-800 dark:hover:text-blue-900 font-medium text-right block"
         >
           Forgot password?
-        </a>
+        </Link>
 
         <button disabled={loading} type="submit" className="inline-flex items-center justify-center font-medium rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed bg-violet-600 dark:bg-blue-800 text-white hover:bg-violet-700 dark:hover:bg-blue-900 dark:active:bg-blue-950 active:bg-violet-800 px-6 py-3 text-base w-full">
           {loading? (
@@ -129,13 +130,13 @@ export default function LoginForm({onSubmit,loading}) {
 
         <p className="text-center text-sm text-slate-500">
           Don't have an account?
-          <a
-            href="/register"
+          <Link
+            to="/register"
             className="text-violet-700 dark:text-blue-700 hover:text-violet-800 dark:hover:text-blue-800 font-medium"
           >
             {" "}
             Sign up
-          </a>
+          </Link>
         </p>
       </form>
     </div>
