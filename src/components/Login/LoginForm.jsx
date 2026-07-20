@@ -9,7 +9,7 @@ export default function LoginForm({onSubmit,loading}) {
     <div className="min-h-[80vh] flex flex-col justify-center">
       <div className="mb-8 text-center">
         <Link
-          href="/"
+          to="/"
           className="text-2xl font-bold flex items-center justify-center gap-2 text-violet-700 dark:text-blue-700 mb-2"
         >
           <svg
