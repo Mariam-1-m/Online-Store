@@ -24,7 +24,7 @@ export default function LoginPage() {
     }
   return (
     <>
-      <LoginForm onSubmit={onSubmit} />
+      <LoginForm onSubmit={onSubmit} loading={loading}/>
     </>
   );
 }
