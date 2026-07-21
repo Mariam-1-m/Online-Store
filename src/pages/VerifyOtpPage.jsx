@@ -2,12 +2,13 @@ import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useSearchParams, useNavigate, useLocation } from "react-router-dom";
+import axios from "../lib/api.js"
 
 export default function VerifyOtp() {
   const navigate = useNavigate();
   const [time, setTime] = useState(60);
   const [loading, setLoading] = useState(false);
-  const [resendUsed, setResendUsed] = useState(false)
+  const resendRef = useRef(false);
   const [otp, setOTP] = useState(["","","","","",""])
   const { register, handleSubmit } = useForm();
   const [searchParams] = useSearchParams();
@@ -18,8 +19,17 @@ export default function VerifyOtp() {
   const email = mode === "reset" ? otpVerifyEmail : createAccountEmail 
   const isReset = mode === "reset"
 
+  useEffect(()=> {
+  if(!email){
+    navigate("/login")
+  }
+  },[email,navigate])
+
   useEffect(() => {
-    if (time === 0) return;
+    if (time === 0) {
+      resendRef.current = false
+      return;
+    }
 
     const interval = setInterval(() => {
       setTime((prev) => prev - 1);
@@ -28,13 +38,25 @@ export default function VerifyOtp() {
     return () => clearInterval(interval);
   }, [time]);
 
-  const resend = () => {
-    if(resendUsed) {
+  const resend = async () => {
+    if(resendRef.current) {
     return;
     }
+    try{
+      resendRef.current = true;
+      console.log("Sending request...");
+      if(isReset){
+       await axios.post("/auth/forgot-password/send-otp", {email});
+      }else{
+       await axios.post("/auth/register/send-otp", {email});
+      }
     setTime(60);
-    setResendUsed(true);
     toast.success("OTP resent")
+    }catch(err){
+    resendRef.current = false;
+    toast.error(err.response?.data?.message || "Something went wrong");
+    }
+
   };
 
   const onError = (errors) => {
@@ -52,6 +74,22 @@ export default function VerifyOtp() {
       return;
     }
       setLoading(true);
+      const payload1 = {
+        email: email,
+        otp: otpCode,
+        newPassword: data.newPassword,
+      }
+      const payload2 = {
+        email:email,
+        otp: otpCode,
+      }
+      if(isReset){
+      await axios.post("/auth/forgot-password/verify-otp", payload1)
+      }else{
+      await axios.post("/auth/register/verify-otp", payload2)
+      }
+      toast.success(isReset ? "Password reset successfully" : "Account created successfully")
+      navigate("/login");
     } catch (err) {
       toast.error(err.response?.data?.message || "Something went wrong");
     } finally {
