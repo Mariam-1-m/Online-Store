@@ -10,8 +10,8 @@ export default function SignupPage() {
     const onSubmit = async (data) => {
     try{
     setLoading(true)
-    const res = await axios.post("/auth/register/send-otp", data)
-    console.log(res)
+    console.log(data)
+    await axios.post("/auth/register/send-otp", data)
     toast.success("OTP sent to your email")
     navigate("/verify-otp", {
       state: {email : data.email}
