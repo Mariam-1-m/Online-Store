@@ -18,8 +18,7 @@ export default function ForgotPasswordPage() {
       const onSubmit = async (data) => {
         try{
         setLoading(true);
-        const res = await axios.post("/auth/forgot-password/send-otp", data)
-        console.log(res)
+        await axios.post("/auth/forgot-password/send-otp", data)
         toast.success("OTP sent to your email");
         navigate(`/verify-otp?email=${data.email}&mode=reset`)
         }catch(err){
