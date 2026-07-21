@@ -27,7 +27,7 @@ export default function WishListComponent(){
         try{            
             const response =await api.delete(`/wishlists/remove/${productId}`)
             console.log("product deleted from wishlist succsess")
-            toast.success("product Deleted From Wishlist Successfully")
+            toast.success("product Deleted From Wishlist Successfully!")
             fetchWishlist();
         }catch(err){
             console.log(err)
