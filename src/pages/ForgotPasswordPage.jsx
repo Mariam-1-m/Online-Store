@@ -9,7 +9,6 @@ export default function ForgotPasswordPage() {
     const navigate = useNavigate()
       const [loading, setLoading] = useState(false);
       const { register, handleSubmit } = useForm();
-
       const onError = (errors) => {
         if(errors.email) {
          toast.error("Please enter your email")
@@ -22,7 +21,9 @@ export default function ForgotPasswordPage() {
         const res = await axios.post("/auth/forgot-password/send-otp", data)
         console.log(res)
         toast.success("OTP sent to your email");
-        navigate("/verify-otp")
+        navigate("/verify-otp", {
+          state: {email : data.email}
+        })
         }catch(err){
         toast.error(err.response?.data?.message || "Something went wrong")
         }finally{
