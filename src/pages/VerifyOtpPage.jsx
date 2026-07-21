@@ -38,11 +38,6 @@ export default function VerifyOtp() {
   };
 
   const onError = (errors) => {
-    const otpCode = otp.join("")
-    if(otpCode.length !== 6){
-      toast.error("Please enter complete OTP")
-      return;
-    }
      if(errors.newPassword) {
       toast.error("Please enter your password");
       return;
@@ -51,6 +46,11 @@ export default function VerifyOtp() {
 
   const onSubmit = async (data) => {
     try {
+    const otpCode = otp.join("")
+    if(otpCode.length !== 6){
+      toast.error("Please enter complete OTP")
+      return;
+    }
       setLoading(true);
     } catch (err) {
       toast.error(err.response?.data?.message || "Something went wrong");
