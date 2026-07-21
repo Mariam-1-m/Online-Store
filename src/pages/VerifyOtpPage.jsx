@@ -2,32 +2,32 @@ import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useSearchParams, useNavigate, useLocation } from "react-router-dom";
-import axios from "../lib/api.js"
+import axios from "../lib/api.js";
 
 export default function VerifyOtp() {
   const navigate = useNavigate();
   const [time, setTime] = useState(60);
   const [loading, setLoading] = useState(false);
   const resendRef = useRef(false);
-  const [otp, setOTP] = useState(["","","","","",""])
+  const [otp, setOTP] = useState(["", "", "", "", "", ""]);
   const { register, handleSubmit } = useForm();
   const [searchParams] = useSearchParams();
-  const otpVerifyEmail = searchParams.get("email")
-  const mode = searchParams.get("mode")
+  const otpVerifyEmail = searchParams.get("email");
+  const mode = searchParams.get("mode");
   const location = useLocation();
-  const createAccountEmail = location?.state?.email
-  const email = mode === "reset" ? otpVerifyEmail : createAccountEmail 
-  const isReset = mode === "reset"
+  const createAccountEmail = location?.state?.email;
+  const email = mode === "reset" ? otpVerifyEmail : createAccountEmail;
+  const isReset = mode === "reset";
 
-  useEffect(()=> {
-  if(!email){
-    navigate("/login")
-  }
-  },[email,navigate])
+  useEffect(() => {
+    if (!email) {
+      navigate("/login");
+    }
+  }, [email, navigate]);
 
   useEffect(() => {
     if (time === 0) {
-      resendRef.current = false
+      resendRef.current = false;
       return;
     }
 
@@ -39,28 +39,27 @@ export default function VerifyOtp() {
   }, [time]);
 
   const resend = async () => {
-    if(resendRef.current) {
-    return;
+    if (resendRef.current) {
+      return;
     }
-    try{
+    try {
       resendRef.current = true;
       console.log("Sending request...");
-      if(isReset){
-       await axios.post("/auth/forgot-password/send-otp", {email});
-      }else{
-       await axios.post("/auth/register/send-otp", {email});
+      if (isReset) {
+        await axios.post("/auth/forgot-password/send-otp", { email });
+      } else {
+        await axios.post("/auth/register/send-otp", { email });
       }
-    setTime(60);
-    toast.success("OTP resent")
-    }catch(err){
-    resendRef.current = false;
-    toast.error(err.response?.data?.message || "Something went wrong");
+      setTime(60);
+      toast.success("OTP resent");
+    } catch (err) {
+      resendRef.current = false;
+      toast.error(err.response?.data?.message || "Something went wrong");
     }
-
   };
 
   const onError = (errors) => {
-     if(errors.newPassword) {
+    if (errors.newPassword) {
       toast.error("Please enter your password");
       return;
     }
@@ -68,27 +67,31 @@ export default function VerifyOtp() {
 
   const onSubmit = async (data) => {
     try {
-    const otpCode = otp.join("")
-    if(otpCode.length !== 6){
-      toast.error("Please enter complete OTP")
-      return;
-    }
+      const otpCode = otp.join("");
+      if (otpCode.length !== 6) {
+        toast.error("Please enter complete OTP");
+        return;
+      }
       setLoading(true);
       const payload1 = {
         email: email,
         otp: otpCode,
         newPassword: data.newPassword,
-      }
+      };
       const payload2 = {
-        email:email,
+        email: email,
         otp: otpCode,
+      };
+      if (isReset) {
+        await axios.post("/auth/forgot-password/verify-otp", payload1);
+      } else {
+        await axios.post("/auth/register/verify-otp", payload2);
       }
-      if(isReset){
-      await axios.post("/auth/forgot-password/verify-otp", payload1)
-      }else{
-      await axios.post("/auth/register/verify-otp", payload2)
-      }
-      toast.success(isReset ? "Password reset successfully" : "Account created successfully")
+      toast.success(
+        isReset
+          ? "Password reset successfully"
+          : "Account created successfully",
+      );
       navigate("/login");
     } catch (err) {
       toast.error(err.response?.data?.message || "Something went wrong");
@@ -124,7 +127,10 @@ export default function VerifyOtp() {
           Verify Your Email
         </h1>
         <p className="text-sm text-slate-500 mt-1">
-          We sent a 6-digit code to <span className="font-semibold text-slate-700 dark:text-slate-300">{email}</span>
+          We sent a 6-digit code to{" "}
+          <span className="font-semibold text-slate-700 dark:text-slate-300">
+            {email}
+          </span>
         </p>
       </div>
       <form
@@ -139,12 +145,24 @@ export default function VerifyOtp() {
                 key={index}
                 ref={(e1) => (inputRef.current[index] = e1)}
                 onChange={(e) => {
-                  const value = e.target.value
-                  const newOTP = [...otp]
-                    newOTP[index] = value
-                    setOTP(newOTP)
+                  const value = e.target.value;
+                  if (!/^\d?$/.test(value)) return;
+                  const newOTP = [...otp];
+                  newOTP[index] = value;
+                  setOTP(newOTP);
                   if (value && index < 5) {
                     inputRef.current[index + 1].focus();
+                  }
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Backspace") {
+                    const newOTP = [...otp];
+                    if (otp[index]) {
+                      newOTP[index] = "";
+                      setOTP(newOTP);
+                    } else if (index > 0) {
+                      inputRef.current[index - 1]?.focus();
+                    }
                   }
                 }}
                 type="text"
@@ -154,22 +172,22 @@ export default function VerifyOtp() {
               />
             ))}
           </div>
-           
-           { mode === "reset" && 
-           <div>
-          <label className="text-xs font-medium text-slate-500 mb-1">
-            New Password
-          </label>
-          <input
-            {...register("newPassword", {
-              required: "Password is required.",
-            })}
-            placeholder="Enter new password"
-            className="dark:bg-slate-900/90 w-full pl-4 pr-4 py-2.5 text-sm border rounded-lg bg-white text-slate-700 dark:text-slate-200 focus:outline-none dark:border-slate-600 border-gray-500/20 focus:ring-2 focus:ring-violet-500"
-            type="password"
-          />
-           </div>
-           }
+
+          {mode === "reset" && (
+            <div>
+              <label className="text-xs font-medium text-slate-500 mb-1">
+                New Password
+              </label>
+              <input
+                {...register("newPassword", {
+                  required: "Password is required.",
+                })}
+                placeholder="Enter new password"
+                className="dark:bg-slate-900/90 w-full pl-4 pr-4 py-2.5 text-sm border rounded-lg bg-white text-slate-700 dark:text-slate-200 focus:outline-none dark:border-slate-600 border-gray-500/20 focus:ring-2 focus:ring-violet-500"
+                type="password"
+              />
+            </div>
+          )}
         </div>
 
         <button
@@ -180,10 +198,14 @@ export default function VerifyOtp() {
           {loading ? (
             <div className="flex items-center gap-2.5">
               <div className="w-4.5 h-4.5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-              <span>{isReset ? "Reset Password" : "Verify & Create Account"}</span>
+              <span>
+                {isReset ? "Reset Password" : "Verify & Create Account"}
+              </span>
             </div>
           ) : (
-              <span>{isReset ? "Reset Password" : "Verify & Create Account"}</span>
+            <span>
+              {isReset ? "Reset Password" : "Verify & Create Account"}
+            </span>
           )}
         </button>
 
