@@ -1,6 +1,7 @@
+
 function OrderSummaryCard(){
     return(
-     <div className="md:w-full w-full h-auto  flex flex-col justify-between dark:bg-[#131b2e] gap-3 rounded-xl border border-slate-200 dark:border-[#23304a] bg-white/80 p-5">
+     <div className="md:w-full w-full h-auto  flex flex-col justify-between dark:bg-[#131b2e] gap-3 rounded-xl border border-slate-200 dark:border-[#23304a] bg-white/80 p-5 mt-13">
     <h3 className='flex items-center font-bold'> Order Summary</h3>
   <div className="w-full h-auto ">
 

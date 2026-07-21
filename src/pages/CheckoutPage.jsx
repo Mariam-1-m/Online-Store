@@ -5,8 +5,10 @@ import ShippingCard from "../components/Checkout/ShippingCard";
 
 function CheckoutPage(){
 return(
-    <div className="w-full h-auto flex flex-col  md:flex-row justify-between gap-5  p-15 ">
+    <div className="w-full h-auto flex flex-col  md:flex-row justify-between gap-5  px-15 py-12 ">
+   
        <div className="w-full md:w-[65%] flex flex-col justify-between gap-5">
+         <h2 className="font-bold text-2xl">Checkout</h2>
          <ShippingCard/>
         <PaymentMethodeCard/>
         <OrderNotesCard/>
