@@ -1,16 +1,18 @@
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 
 export default function VerifyOtp() {
   const navigate = useNavigate();
   const [time, setTime] = useState(60);
   const [loading, setLoading] = useState(false);
   const [resendUsed, setResendUsed] = useState(false)
+  const [otp, setOTP] = useState(["","","","","",""])
   const { register, handleSubmit } = useForm();
-  const location = useLocation();
-  const otpVerifyEmail = location?.state?.email;
+  const [searchParams] = useSearchParams();
+  const otpVerifyEmail = searchParams.get("email")
+  const mode = searchParams.get("mode")
 
   useEffect(() => {
     if (time === 0) return;
@@ -32,8 +34,14 @@ export default function VerifyOtp() {
   };
 
   const onError = (errors) => {
-    if (errors.password) {
+    const otpCode = otp.join("")
+    if(otpCode.length !== 6){
+      toast.error("Please enter complete OTP")
+      return;
+    }
+     if(errors.newPassword) {
       toast.error("Please enter your password");
+      return;
     }
   };
 
@@ -85,10 +93,15 @@ export default function VerifyOtp() {
           <div className="flex items-center justify-center gap-3">
             {Array.from({ length: 6 }).map((_, index) => (
               <input
+                value={otp[index]}
                 key={index}
                 ref={(e1) => (inputRef.current[index] = e1)}
                 onChange={(e) => {
-                  if (e.target.value) {
+                  const value = e.target.value
+                  const newOTP = [...otp]
+                  if (value) {
+                    newOTP[index] = value
+                    setOTP(newOTP)
                     inputRef.current[index + 1].focus();
                   }
                 }}
@@ -104,7 +117,7 @@ export default function VerifyOtp() {
             New Password
           </label>
           <input
-            {...register("password", {
+            {...register("newPassword", {
               required: "Password is required.",
             })}
             placeholder="Enter new password"
