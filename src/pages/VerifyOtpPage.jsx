@@ -16,6 +16,7 @@ export default function VerifyOtp() {
   const location = useLocation();
   const createAccountEmail = location?.state?.email
   const email = mode === "reset" ? otpVerifyEmail : createAccountEmail 
+  const isReset = mode === "reset"
 
   useEffect(() => {
     if (time === 0) return;
@@ -141,19 +142,10 @@ export default function VerifyOtp() {
           {loading ? (
             <div className="flex items-center gap-2.5">
               <div className="w-4.5 h-4.5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-              { mode === "reset" ? (
-              <span>Reset Password</span>
-              ):(
-              <span>Verify & Create Account</span>
-              )
-              }
+              <span>{isReset ? "Reset Password" : "Verify & Create Account"}</span>
             </div>
           ) : (
-              mode === "reset" ? (
-            <span>Reset Password</span>
-              ) : (
-            <span>Verify & Create Account</span>
-              )
+              <span>{isReset ? "Reset Password" : "Verify & Create Account"}</span>
           )}
         </button>
 
