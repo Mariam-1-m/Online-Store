@@ -87,9 +87,9 @@ export default function Header() {
                         </ul>
                         <ul className={`flex items-center ${textColor} justify-around leading-3 px-5 h-10 rounded-3xl`}>
                            <li className={`${isNavExpanded? 'flex':'hidden'} sm:flex`}>
-        {isSearchExpanded ?(  <div className="bg-gray-50 px-3 py-1 rounded-3xl border text-sm border-gray-200 flex items-center justify-between shadow-sm">
-              <input type="text" placeholder="Search..." onKeyDown={handleSearch} className="bg-gray-50 focus:outline-none" />
-             <button onClick={()=>setIsSearchExpanded(false)} className="size-8 text-sm hover:bg-white rounded-full px-1"><X size={16} /></button>
+        {isSearchExpanded ?(  <div className="bg-gray-50 dark:bg-slate-900/60 px-3 py-1 rounded-3xl border text-sm border-gray-200 flex items-center justify-between shadow-sm">
+              <input type="text" placeholder="Search..." onKeyDown={handleSearch} className="bg-gray-50 dark:bg-slate-900/60 focus:outline-none" />
+             <button onClick={()=>setIsSearchExpanded(false)} className="size-8 text-sm hover:bg-white dark:hover:text-black rounded-full px-1 flex items-center justify-center"><X size={16} /></button>
        </div>):<button onClick={() => setIsSearchExpanded(true)} className=" flex items-center cursor-pointer hover:text-indigo-600 hover:bg-white justify-center p-3 mx-2 shadow-sm  rounded-full   bg-gray-50 "><Search size={16} /></button>}
       
        </li>
