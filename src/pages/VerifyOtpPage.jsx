@@ -219,7 +219,6 @@ export default function VerifyOtp() {
             ) : (
               <span
                 className={`font-semibold ml-1 text-slate-400 cursor-not-allowed ${time === 0 ? "hidden" : "visible"}`}
-                disabled
               >
                 Resend in {time}s
               </span>
