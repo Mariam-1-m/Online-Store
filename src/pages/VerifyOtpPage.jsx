@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { useSearchParams, useNavigate } from "react-router-dom";
+import { useSearchParams, useNavigate, useLocation } from "react-router-dom";
 
 export default function VerifyOtp() {
   const navigate = useNavigate();
@@ -13,6 +13,9 @@ export default function VerifyOtp() {
   const [searchParams] = useSearchParams();
   const otpVerifyEmail = searchParams.get("email")
   const mode = searchParams.get("mode")
+  const location = useLocation();
+  const createAccountEmail = location?.state?.email
+  const email = mode === "reset" ? otpVerifyEmail : createAccountEmail 
 
   useEffect(() => {
     if (time === 0) return;
@@ -82,7 +85,7 @@ export default function VerifyOtp() {
           Verify Your Email
         </h1>
         <p className="text-sm text-slate-500 mt-1">
-          We sent a 6-digit code to {otpVerifyEmail}
+          We sent a 6-digit code to <span className="font-semibold text-slate-700 dark:text-slate-300">{email}</span>
         </p>
       </div>
       <form
@@ -99,9 +102,9 @@ export default function VerifyOtp() {
                 onChange={(e) => {
                   const value = e.target.value
                   const newOTP = [...otp]
-                  if (value) {
                     newOTP[index] = value
                     setOTP(newOTP)
+                  if (value && index < 5) {
                     inputRef.current[index + 1].focus();
                   }
                 }}
@@ -112,7 +115,9 @@ export default function VerifyOtp() {
               />
             ))}
           </div>
-
+           
+           { mode === "reset" && 
+           <div>
           <label className="text-xs font-medium text-slate-500 mb-1">
             New Password
           </label>
@@ -124,6 +129,8 @@ export default function VerifyOtp() {
             className="dark:bg-slate-900/90 w-full pl-4 pr-4 py-2.5 text-sm border rounded-lg bg-white text-slate-700 dark:text-slate-200 focus:outline-none dark:border-slate-600 border-gray-500/20 focus:ring-2 focus:ring-violet-500"
             type="password"
           />
+           </div>
+           }
         </div>
 
         <button
@@ -134,10 +141,19 @@ export default function VerifyOtp() {
           {loading ? (
             <div className="flex items-center gap-2.5">
               <div className="w-4.5 h-4.5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+              { mode === "reset" ? (
               <span>Reset Password</span>
+              ):(
+              <span>Verify & Create Account</span>
+              )
+              }
             </div>
           ) : (
+              mode === "reset" ? (
             <span>Reset Password</span>
+              ) : (
+            <span>Verify & Create Account</span>
+              )
           )}
         </button>
 
