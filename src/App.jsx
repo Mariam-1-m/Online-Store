@@ -20,11 +20,26 @@ import ProfilePage from "./pages/ProfilePage";
 import OrdersPage from "./pages/OrdersPage";
 import OrderDetailPage from "./pages/OrderDetailsPage";
 import NotFoundPage from "./pages/404";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   return (
     <>
       <BrowserRouter>
+      <Toaster 
+      toastOptions={{
+        style:{
+          background: "#1e293b",
+          color: "#fff",
+          borderRadius: "12px",
+        },
+        success: {
+          iconTheme: {
+            primary: "#4ade80",
+            secondary: "#fff"
+          }
+        }
+      }}/>
         <Routes>
           <Route   element={<AppLayout/>}>
           {/* public routes */}

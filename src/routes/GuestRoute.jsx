@@ -1,7 +1,9 @@
+import { Outlet } from "react-router-dom";
 
-
-function GuestRoute() {
-  
+export default function GuestRoute() {
+  return (
+    <>
+      <Outlet />
+    </>
+  );
 }
-
-export default GuestRoute;
