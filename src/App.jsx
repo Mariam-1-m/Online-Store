@@ -50,6 +50,7 @@ function App() {
             <Route path="/success/:orderId" element={<OrderSuccessPage />} />
             <Route path="/wishlist" element={<WishlistPage />} />
               <Route path="/orders" element={<OrdersPage />} />
+              <Route path="/profile" element={<ProfilePage />} />
 
           {/* guest routes */}
           <Route element={<GuestRoute />}>
@@ -68,7 +69,7 @@ function App() {
               <Route path="/checkout" element={<CheckoutPage />}>
               <Route path="success/:orderId" element={<OrderSuccessPage />} />
              </Route>
-              <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/profile:userId" element={<ProfilePage />} />
               <Route path="/orders" element={<OrdersPage />} />
               <Route path="/orders/:id" element={<OrderDetailPage />} />
             </Route>
