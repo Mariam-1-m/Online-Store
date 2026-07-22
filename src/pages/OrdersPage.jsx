@@ -30,7 +30,7 @@ function OrdersPage() {
   if (isLoading && limit === 10) return <Loader />;
 
   return (
-    <div className="max-w-4xl mx-auto px-4 pb-12 space-y-6 animate-fade-in">
+    <div className="max-w-4xl mx-auto px-4 py-10 pb-12 space-y-6 animate-fade-in">
       <OrderHeader />
       <OrdersList orders={ordersData.orders} />
       {ordersData?.orders?.length >= limit && (

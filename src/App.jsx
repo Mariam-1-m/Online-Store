@@ -49,6 +49,7 @@ function App() {
             <Route path="/checkout" element={<CheckoutPage />} />
             <Route path="/success/:orderId" element={<OrderSuccessPage />} />
             <Route path="/wishlist" element={<WishlistPage />} />
+              <Route path="/orders" element={<OrdersPage />} />
 
           {/* guest routes */}
           <Route element={<GuestRoute />}>
