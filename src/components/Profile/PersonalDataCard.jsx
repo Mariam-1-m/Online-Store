@@ -1,14 +1,29 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import api from "../../lib/api";
 import { Mail, Phone } from "lucide-react";
 
 export default function PersonalDataCard() {
-  const [user] = useState({
-    name: "samaa",
-    email: "customer@gmail.com",
-    role: "Admin",
-    phone: "01013369328",
-    image: "",
-  });
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const getUser = async () => {
+      try {
+        const res = await api.get("/auth/me");
+
+        console.log("profile Data",res.data);
+        setUser(res.data.user);
+
+      } catch (error) {
+  console.log("PersonalData Error:", error.response?.data);
+}
+    };
+
+    getUser();
+  }, []);
+
+  if (!user) {
+    return <h2 className="text-center text-xl">Loading...</h2>;
+  }
 
   return (
     <div className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl p-6 shadow-sm">
@@ -22,7 +37,7 @@ export default function PersonalDataCard() {
             />
           ) : (
             <span className="text-xl font-bold text-gray-500">
-              {user.name.charAt(0).toUpperCase()}
+              {user.name?.charAt(0).toUpperCase()}
             </span>
           )}
         </div>
