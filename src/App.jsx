@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ProtectedRoute from "./routes/ProtectedRoute";
-import GuestRoute from "./routes/GuestRoute"; 
+import GuestRoute from "./routes/GuestRoute";
 import AppLayout from "./layouts/AppLayout";
 
 
@@ -26,7 +26,7 @@ function App() {
   return (
     <>
       <BrowserRouter>
-      <Toaster 
+      <Toaster
       toastOptions={{
         style:{
           background: "#1e293b",
@@ -63,7 +63,7 @@ function App() {
             <Route element={<AppLayout />}>
               <Route path="/cart" element={<CartPage />} />
               <Route path="/wishlist" element={<WishlistPage />} />
-            
+
               <Route path="/checkout" element={<CheckoutPage />}>
               <Route path="success/:orderId" element={<OrderSuccessPage />} />
              </Route>
