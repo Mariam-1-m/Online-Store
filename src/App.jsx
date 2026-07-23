@@ -52,6 +52,8 @@ function App() {
               <Route path="/orders" element={<OrdersPage />} />
               <Route path="/profile" element={<ProfilePage />} />
 
+              <Route path="/orders/:id" element={<OrderDetailPage />} />
+
           {/* guest routes */}
           <Route element={<GuestRoute />}>
             <Route path="/register" element={<SignupPage />} />
@@ -71,7 +73,7 @@ function App() {
              </Route>
               <Route path="/profile:userId" element={<ProfilePage />} />
               <Route path="/orders" element={<OrdersPage />} />
-              <Route path="/orders/:id" element={<OrderDetailPage />} />
+              
             </Route>
           </Route>
 
