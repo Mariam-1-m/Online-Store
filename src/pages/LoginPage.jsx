@@ -8,12 +8,12 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+    const token = localStorage.getItem("token");
   const from = location.state?.from?.pathname || "/";
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) navigate("/", {replace: true})
-  },[navigate])
+    if (token) navigate("/", {replace: true})
+  },[navigate,token])
 
   const onSubmit = async (data) => {
     try {
