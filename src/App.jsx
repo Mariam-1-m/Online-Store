@@ -5,7 +5,8 @@ import AppLayout from "./layouts/AppLayout";
 
 
 import HomePage from "./pages/HomePage";
-import ProductsPage from "./pages/ProductsPage";
+// import ProductsPage from "./pages/ProductsPage";
+import ShopPage from "./pages/ShopPage"
 import ProductDetailsPage from "./pages/ProductDetailsPage";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
@@ -44,7 +45,7 @@ function App() {
           <Route   element={<AppLayout/>}>
           {/* public routes */}
           <Route path="/" element={<HomePage />} />
-          <Route path="/products" element={<ProductsPage />} />
+          <Route path="/products" element={<ShopPage />} />
           <Route path="/products/:id" element={<ProductDetailsPage />} />
             <Route path="/checkout" element={<CheckoutPage />} />
             <Route path="/success-order/:orderId" element={<OrderSuccessPage />} />
