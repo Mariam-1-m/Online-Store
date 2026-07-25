@@ -1,5 +1,5 @@
 import { ChevronRight } from "lucide-react";
-import { formatCurrency } from "../../utils/formatCurrency";
+import { formatCurrency } from "../../utills/formatCurrency";
 
 function OrderPrice({ orderPrice }) {
   return (

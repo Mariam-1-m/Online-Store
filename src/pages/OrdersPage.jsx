@@ -14,7 +14,9 @@ function OrdersPage() {
   useEffect(() => {
     async function fetchOrders() {
       try {
+        setIsLoading(true);
         const data = await getOrders(currentPage, token);
+        console.log(data);
         setOrders(data);
       } catch (err) {
         console.log(err.message);
@@ -29,7 +31,7 @@ function OrdersPage() {
   if (isLoading) return <Loader />;
 
   return (
-    <div className="max-w-4xl mx-auto px-4 pb-12 space-y-6 animate-fade-in">
+    <div className="max-w-4xl mx-auto px-4 py-10 pb-12 space-y-6 animate-fade-in">
       <OrderHeader />
       <OrdersList orders={ordersData.orders} />
       <OrderPagination

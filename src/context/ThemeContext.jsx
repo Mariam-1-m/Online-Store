@@ -1,7 +1,11 @@
+/* eslint-disable react-refresh/only-export-components */
+
 import { createContext, useEffect, useState } from "react";
 
-const DEFAULT_THEME = "dark"
-const ThemeContext = createContext();
+const DEFAULT_THEME = "dark";
+
+export const ThemeContext = createContext();
+
 export const ThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState(() => {
     if (typeof window === "undefined") return DEFAULT_THEME;

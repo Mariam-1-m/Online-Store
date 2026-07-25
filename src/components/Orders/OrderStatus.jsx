@@ -1,4 +1,4 @@
-import { baseStatusClasses, statusClasses } from "../../utils/statusClasses";
+import { baseStatusClasses, statusClasses } from "../../utills/statusClasses";
 
 function OrderStatus({ orderStatus }) {
   return (

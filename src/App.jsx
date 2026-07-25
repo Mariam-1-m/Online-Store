@@ -23,8 +23,6 @@ import NotFoundPage from "./pages/404";
 import { Toaster } from "react-hot-toast";
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <>
       <BrowserRouter>
@@ -49,8 +47,12 @@ function App() {
           <Route path="/products" element={<ProductsPage />} />
           <Route path="/products/:id" element={<ProductDetailsPage />} />
             <Route path="/checkout" element={<CheckoutPage />} />
-            <Route path="/success/:orderId" element={<OrderSuccessPage />} />
+            <Route path="/success-order/:orderId" element={<OrderSuccessPage />} />
             <Route path="/wishlist" element={<WishlistPage />} />
+              <Route path="/orders" element={<OrdersPage />} />
+              <Route path="/profile" element={<ProfilePage />} />
+
+              <Route path="/orders/:id" element={<OrderDetailPage />} />
 
           {/* guest routes */}
           <Route element={<GuestRoute />}>
@@ -69,9 +71,9 @@ function App() {
               <Route path="/checkout" element={<CheckoutPage />}>
               <Route path="success/:orderId" element={<OrderSuccessPage />} />
              </Route>
-              <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/profile:userId" element={<ProfilePage />} />
               <Route path="/orders" element={<OrdersPage />} />
-              <Route path="/orders/:id" element={<OrderDetailPage />} />
+              
             </Route>
           </Route>
 
@@ -80,7 +82,7 @@ function App() {
         </Routes>
       </BrowserRouter>
     </>
-  )
+  );
 }
 
 export default App;

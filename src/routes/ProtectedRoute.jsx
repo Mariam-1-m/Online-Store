@@ -1,3 +1,7 @@
-function ProtectedRoute() {}
+
+
+function ProtectedRoute() {
+  
+}
 
 export default ProtectedRoute;
