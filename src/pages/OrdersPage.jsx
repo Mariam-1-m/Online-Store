@@ -16,7 +16,6 @@ function OrdersPage() {
       try {
         setIsLoading(true);
         const data = await getOrders(currentPage, token);
-        console.log(data);
         setOrders(data);
       } catch (err) {
         console.log(err.message);
