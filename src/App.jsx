@@ -22,6 +22,7 @@ import OrderDetailsPage from "./pages/OrderDetailsPage";
 import NotFoundPage from "./pages/404";
 import { Toaster } from "react-hot-toast";
 
+
 function App() {
   return (
     <>
@@ -44,7 +45,7 @@ function App() {
           <Route   element={<AppLayout/>}>
           {/* public routes */}
           <Route path="/" element={<HomePage />} />
-          <Route path="/products" element={<ShopPage />} />
+          <Route path="/products" element={<ProductsPage />} />
           <Route path="/products/:id" element={<ProductDetailsPage />} />
                     
           {/* guest routes */}
