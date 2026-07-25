@@ -15,7 +15,6 @@ function OrdersPage() {
     async function fetchOrders() {
       try {
         const data = await getOrders(limit, token);
-        console.log(data);
         setOrders(data);
       } catch (err) {
         console.log(err.message);
@@ -33,12 +32,8 @@ function OrdersPage() {
     <div className="max-w-4xl mx-auto px-4 py-10 pb-12 space-y-6 animate-fade-in">
       <OrderHeader />
       <OrdersList orders={ordersData.orders} />
-      {ordersData?.orders?.length >= limit && (
-        <MoreOrders
-          totalOrders={ordersData.total}
-          limit={limit}
-          setLimit={setLimit}
-        />
+      {ordersData?.total >= limit && limit < 50 && (
+        <MoreOrders setLimit={setLimit} />
       )}
     </div>
   );

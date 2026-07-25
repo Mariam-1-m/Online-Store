@@ -1,8 +1,6 @@
-function MoreOrders({ limit, setLimit, totalOrders }) {
+function MoreOrders({ setLimit }) {
   const handleLimit = () => {
-    if (limit < totalOrders) {
-      setLimit((prevLimit) => prevLimit + 10);
-    }
+    setLimit((prevLimit) => prevLimit + 10);
   };
 
   return (
