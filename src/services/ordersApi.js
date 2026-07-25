@@ -1,10 +1,10 @@
 import api from "../lib/api";
 import { toast } from "react-hot-toast";
 
-export async function getOrders(limit, token) {
+export async function getOrders(currentPage, token) {
   try {
     const res = await api.get(
-      `https://e-commerce-api-3wara.vercel.app/orders/my?page=1&limit=${limit}`,
+      `https://e-commerce-api-3wara.vercel.app/orders/my?page=${currentPage}&limit=10`,
       {
         headers: { Authorization: `Bearer ${token}` },
       },
