@@ -72,7 +72,7 @@ function App() {
               <Route path="/checkout" element={<CheckoutPage />}>
               <Route path="success/:orderId" element={<OrderSuccessPage />} />
              </Route>
-              <Route path="/profile:userId" element={<ProfilePage />} />
+              <Route path="/profile/:userId" element={<ProfilePage />} />
               <Route path="/orders" element={<OrdersPage />} />
               
             </Route>
