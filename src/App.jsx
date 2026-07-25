@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ProtectedRoute from "./routes/ProtectedRoute";
-import GuestRoute from "./routes/GuestRoute"; 
+import GuestRoute from "./routes/GuestRoute";
 import AppLayout from "./layouts/AppLayout";
 
 
@@ -20,11 +20,26 @@ import ProfilePage from "./pages/ProfilePage";
 import OrdersPage from "./pages/OrdersPage";
 import OrderDetailPage from "./pages/OrderDetailsPage";
 import NotFoundPage from "./pages/404";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   return (
     <>
       <BrowserRouter>
+      <Toaster
+      toastOptions={{
+        style:{
+          background: "#1e293b",
+          color: "#fff",
+          borderRadius: "12px",
+        },
+        success: {
+          iconTheme: {
+            primary: "#4ade80",
+            secondary: "#fff"
+          }
+        }
+      }}/>
         <Routes>
           <Route   element={<AppLayout/>}>
           {/* public routes */}
@@ -32,6 +47,12 @@ function App() {
           <Route path="/products" element={<ProductsPage />} />
           <Route path="/products/:id" element={<ProductDetailsPage />} />
             <Route path="/checkout" element={<CheckoutPage />} />
+            <Route path="/success-order/:orderId" element={<OrderSuccessPage />} />
+            <Route path="/wishlist" element={<WishlistPage />} />
+              <Route path="/orders" element={<OrdersPage />} />
+              <Route path="/profile" element={<ProfilePage />} />
+
+              <Route path="/orders/:id" element={<OrderDetailPage />} />
 
           {/* guest routes */}
           <Route element={<GuestRoute />}>
@@ -46,11 +67,13 @@ function App() {
             <Route element={<AppLayout />}>
               <Route path="/cart" element={<CartPage />} />
               <Route path="/wishlist" element={<WishlistPage />} />
-              <Route path="/checkout" element={<CheckoutPage />} />
-              <Route path="/order-success" element={<OrderSuccessPage />} />
-              <Route path="/profile" element={<ProfilePage />} />
+
+              <Route path="/checkout" element={<CheckoutPage />}>
+              <Route path="success/:orderId" element={<OrderSuccessPage />} />
+             </Route>
+              <Route path="/profile:userId" element={<ProfilePage />} />
               <Route path="/orders" element={<OrdersPage />} />
-              <Route path="/orders/:id" element={<OrderDetailPage />} />
+              
             </Route>
           </Route>
 

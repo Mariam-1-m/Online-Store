@@ -1,5 +1,4 @@
-function CartPage(){
+function WishlistPage(){
 
 }
-
-export default CartPage;
+export default WishlistPage;

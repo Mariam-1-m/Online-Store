@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { Cable, HouseWifi, Dumbbell, Heart, Star, ShoppingCart } from "lucide-react";
 
 export default function ShopSection() {
@@ -325,3 +326,14 @@ export default function ShopSection() {
     </div>
   );
 }
+=======
+import React from 'react'
+
+export default function ShopByCategory() {
+  return (
+    <div>
+      
+    </div>
+  )
+}
+>>>>>>> b368da0fa7deff77f684c66afea5388448b926a8
