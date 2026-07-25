@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import LoginForm from "../components/Login/LoginForm.jsx";
 import axios from "../lib/api.js";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -9,6 +9,12 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) navigate("/", {replace: true})
+  },[navigate])
+
   const onSubmit = async (data) => {
     try {
       setLoading(true);
