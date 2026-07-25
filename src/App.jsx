@@ -47,13 +47,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/products" element={<ProductsPage />} />
           <Route path="/products/:id" element={<ProductDetailsPage />} />
-            <Route path="/checkout" element={<CheckoutPage />} />
-            <Route path="/success-order/:orderId" element={<OrderSuccessPage />} />
-            <Route path="/wishlist" element={<WishlistPage />} />
-              <Route path="/orders" element={<OrdersPage />} />
-              <Route path="/profile" element={<ProfilePage />} />
-
-              <Route path="/orders/:id" element={<OrderDetailPage />} />
+         
 
           {/* guest routes */}
           <Route element={<GuestRoute />}>
@@ -65,17 +59,16 @@ function App() {
 
           {/* user routes */}
           <Route element={<ProtectedRoute />}>
-            <Route element={<AppLayout />}>
+            
               <Route path="/cart" element={<CartPage />} />
               <Route path="/wishlist" element={<WishlistPage />} />
-
-              <Route path="/checkout" element={<CheckoutPage />}>
-              <Route path="success/:orderId" element={<OrderSuccessPage />} />
-             </Route>
-              <Route path="/profile:userId" element={<ProfilePage />} />
-              <Route path="/orders" element={<OrdersPage />} />
-              
-            </Route>
+              <Route path="/checkout" element={<CheckoutPage />}/>
+              <Route path="/success-order/:orderId" element={<OrderSuccessPage />} />
+              <Route path="/profile/:userId" element={<ProfilePage />} />
+              <Route path="/orders" element={<OrdersPage />} >
+               <Route path=":orderId" element={<OrderDetailPage />} />
+              </Route>
+            
           </Route>
 
           </Route>
