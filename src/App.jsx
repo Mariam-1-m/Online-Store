@@ -5,7 +5,6 @@ import AppLayout from "./layouts/AppLayout";
 
 
 import HomePage from "./pages/HomePage";
-// import ProductsPage from "./pages/ProductsPage";
 import ShopPage from "./pages/ShopPage"
 import ProductDetailsPage from "./pages/ProductDetailsPage";
 import LoginPage from "./pages/LoginPage";
@@ -19,7 +18,7 @@ import CheckoutPage from "./pages/CheckoutPage";
 import OrderSuccessPage from "./pages/OrderSuccessPage";
 import ProfilePage from "./pages/ProfilePage";
 import OrdersPage from "./pages/OrdersPage";
-import OrderDetailPage from "./pages/OrderDetailsPage";
+import OrderDetailsPage from "./pages/OrderDetailsPage";
 import NotFoundPage from "./pages/404";
 import { Toaster } from "react-hot-toast";
 
@@ -47,8 +46,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/products" element={<ShopPage />} />
           <Route path="/products/:id" element={<ProductDetailsPage />} />
-         
-
+                    
           {/* guest routes */}
           <Route element={<GuestRoute />}>
             <Route path="/register" element={<SignupPage />} />
@@ -65,9 +63,8 @@ function App() {
               <Route path="/checkout" element={<CheckoutPage />}/>
               <Route path="/success-order/:orderId" element={<OrderSuccessPage />} />
               <Route path="/profile/:userId" element={<ProfilePage />} />
-              <Route path="/orders" element={<OrdersPage />} >
-               <Route path=":orderId" element={<OrderDetailPage />} />
-              </Route>
+              <Route path="/orders" element={<OrdersPage />} />
+              <Route path="/orders/:orderId" element={<OrderDetailsPage />} />
             
           </Route>
 

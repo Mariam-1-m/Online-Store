@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import { Package, MapPin, CreditCard, Clock, CheckCircle2, AlertCircle } from 'lucide-react';
 
-export function OrderDetailPage() {
+export function OrderDetailsPage() {
   const [order] = useState({
     id: "#CC8FC4EE",
     status: "Confirmed",
@@ -132,4 +132,4 @@ export function OrderDetailPage() {
   );
 }
 
-export default OrderDetailPage;
+export default OrderDetailsPage;
