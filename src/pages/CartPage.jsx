@@ -3,8 +3,13 @@ import { Link } from "react-router-dom";
 import OrderSummaryCard from '../components/Cart/OrderSummaryCard';
 import CouponCard from '../components/Cart/CouponCard';
 import CartProductsCards from '../components/Cart/CartProductsCard'
+import { useState } from 'react';
 
 function CartPage(){
+
+const [cartProducts,setCardProducts]=useState([]);
+
+
 return(
 <div className='p-8'>
     <h2 className='font-bold text-3xl'>Shopping Cart</h2>
