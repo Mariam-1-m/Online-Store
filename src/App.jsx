@@ -45,7 +45,7 @@ function App() {
           <Route   element={<AppLayout/>}>
           {/* public routes */}
           <Route path="/" element={<HomePage />} />
-          <Route path="/products" element={<ProductsPage />} />
+          <Route path="/products" element={<ShopPage />} />
           <Route path="/products/:id" element={<ProductDetailsPage />} />
                     
           {/* guest routes */}
