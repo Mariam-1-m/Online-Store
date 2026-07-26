@@ -1,4 +1,4 @@
-// import React from 'react'
+import React from 'react'
 import { Mail } from 'lucide-react';
 export default function Subscribtion() {
   return (
