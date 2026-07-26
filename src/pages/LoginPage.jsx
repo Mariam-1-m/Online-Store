@@ -13,7 +13,7 @@ export default function LoginPage() {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) navigate("/", {replace: true})
-  },[navigate,token])
+  },[navigate])
 
   const onSubmit = async (data) => {
     try {
