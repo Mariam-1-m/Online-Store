@@ -23,7 +23,7 @@ export default function ChangePasswordCard() {
     e.preventDefault();
 
     try {
-      await api.post("/auth/forgot-password", {
+      await api.post("/auth/forgot-password/send-otp", {
         email: passwords.email,
       });
 
