@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { Lock } from "lucide-react";
+import api from "../../lib/api";
 
 export default function ChangePasswordCard() {
   const [passwords, setPasswords] = useState({
-    currentPassword: "",
+    email: "",
+    otp: "",
     newPassword: "",
-    confirmPassword: "",
   });
 
   const [showForm, setShowForm] = useState(false);
@@ -17,17 +18,30 @@ export default function ChangePasswordCard() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (passwords.newPassword !== passwords.confirmPassword) {
-      alert("Passwords do not match");
-      return;
+    try {
+      const res = await api.post("/auth/forgot-password/verify-otp", {
+        email: passwords.email,
+        otp: passwords.otp,
+        newPassword: passwords.newPassword,
+      });
+
+      alert("Password updated successfully");
+      console.log(res.data);
+
+      setShowForm(false);
+
+      setPasswords({
+        email: "",
+        otp: "",
+        newPassword: "",
+      });
+    } catch (error) {
+      console.log(error.response?.data);
+      alert(error.response?.data?.message || "Something went wrong");
     }
-
-    console.log(passwords);
-
-    
   };
 
   return (
@@ -50,10 +64,19 @@ export default function ChangePasswordCard() {
         <form onSubmit={handleSubmit} className="space-y-4">
 
           <input
-            type="password"
-            name="currentPassword"
-            placeholder="Current Password"
-            value={passwords.currentPassword}
+            type="email"
+            name="email"
+            placeholder="Email"
+            value={passwords.email}
+            onChange={handleChange}
+            className="w-full border rounded-lg px-4 py-2 outline-none focus:border-indigo-600"
+          />
+
+          <input
+            type="text"
+            name="otp"
+            placeholder="OTP"
+            value={passwords.otp}
             onChange={handleChange}
             className="w-full border rounded-lg px-4 py-2 outline-none focus:border-indigo-600"
           />
@@ -63,15 +86,6 @@ export default function ChangePasswordCard() {
             name="newPassword"
             placeholder="New Password"
             value={passwords.newPassword}
-            onChange={handleChange}
-            className="w-full border rounded-lg px-4 py-2 outline-none focus:border-indigo-600"
-          />
-
-          <input
-            type="password"
-            name="confirmPassword"
-            placeholder="Confirm Password"
-            value={passwords.confirmPassword}
             onChange={handleChange}
             className="w-full border rounded-lg px-4 py-2 outline-none focus:border-indigo-600"
           />
