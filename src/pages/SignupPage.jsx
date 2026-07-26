@@ -2,11 +2,15 @@ import axios from "../lib/api.js";
 import SignupForm from "../components/Signup/SignupForm.jsx";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function SignupPage() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate()
+    useEffect(() => {
+      const token = localStorage.getItem("token");
+      if (token) navigate("/", {replace: true})
+    },[navigate])
     const onSubmit = async (data) => {
     try{
     setLoading(true)
