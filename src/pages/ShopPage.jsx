@@ -5,6 +5,8 @@ import Searchbar from '../components/Shop/Searchbar'
 import Sidebar from '../components/Shop/Sidebar'
 import api from '../lib/api'
 import '../components/Shop/Shop.css'
+
+import { useSearchParams } from "react-router-dom";
 const FILTER_PAGE_SIZE = 100
 const DEFAULT_PAGE_SIZE = 10
 const EMPTY_FILTERS = {
@@ -120,6 +122,7 @@ function ShopPage({
   wishlistProductIds = [],
   pageSize = DEFAULT_PAGE_SIZE,
 }) {
+  const [searchParams] = useSearchParams();
   const limit =
     Number.isInteger(Number(pageSize)) && Number(pageSize) > 0
       ? Number(pageSize)

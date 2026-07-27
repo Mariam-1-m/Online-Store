@@ -5,6 +5,10 @@ import {Moon,Sun,Search, X,Heart,ShoppingCart,Menu,LogOut,House,Box,CircleUserRo
 import { useNavigate } from "react-router-dom";
 import logoImage from "../assets/logo.png";
 
+import { Link } from "react-router-dom";
+import api from "../lib/api";
+import { useEffect } from "react";
+
 export default function Header() {
     const [isSearchExpanded, setIsSearchExpanded] = useState(false);
     const { theme, toggleTheme } = useContext(ThemeContext);
@@ -12,6 +16,13 @@ export default function Header() {
     const navigate = useNavigate();
 
     const isLight = theme === 'light';
+
+    const [searchValue, setSearchValue] = useState("");
+    const [wishlistCount, setWishlistCount] = useState(0);
+    const [cartCount, setCartCount] = useState(0);
+    const user = JSON.parse(localStorage.getItem("user"));
+    const token = localStorage.getItem("token");
+
     
     
     const bgContainer = isLight ? "bg-white/70" : "bg-gray-900/70";
@@ -26,16 +37,41 @@ export default function Header() {
             backgroundColor: isActive ? "oklch(51.1% 0.262 276.966)" : ""
         };
     };
-
     const handleSearch = (event) => {
-        if (event.key === "Enter") {
-            navigate(`/shop`);
-        }
-    };
+  if (event.key === "Enter") {
+    navigate(`/products?search=${searchValue}`);
+    setIsSearchExpanded(false);
+  }
+};
 
     const toggleNav = () => {
         setIsNavExpanded(!isNavExpanded);
     };
+
+  const getCartCount = async () => {
+  if (!token) return;
+
+  try {
+    const res = await api.get("/carts");
+    setCartCount(res.data.itemCount);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+    const getWishlistCount = async () => {
+  try {
+    const res = await api.get("/wishlists/my");
+    setWishlistCount(res.data.wishlist.products.length);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+useEffect(() => {
+  getWishlistCount();
+   getCartCount();
+}, []);
 
     return (
         <div className={`header ${bgContainer} bg-white/80 dark:bg-slate-900/90 w-full h-16 px-2 z-50 inset-0 fixed top-0 ${textColor} border-b ${borderColor} flex items-center justify-center`}>
@@ -78,7 +114,10 @@ export default function Header() {
                     </div>
                 ) : (
                     <>
-                        <div className="logo rounded-2xl overflow-hidden text-2xl font-bold text-indigo-600"><img src={logoImage} alt="" className="w-18 h-12"/></div>
+                     <Link to="/">
+                        <img src={logoImage} alt="" className="w-18 h-12" />
+                          </Link>
+                        {/* <div className="logo rounded-2xl overflow-hidden text-2xl font-bold text-indigo-600"><img src={logoImage} alt="" className="w-18 h-12"/></div> */}
                         <ul className={`hidden md:flex items-center ${bgSub} shadow-sm px-3  py-2 rounded-3xl border ${borderColor}`}>
                             <li><NavLink to="/" className="rounded-full px-4 hover:bg-white hover:text-indigo-600 flex justify-between gap-2 text-sm py-1 mx-1" style={focusStyle}>Home</NavLink></li>
                             <li><NavLink to="/products" className="rounded-full px-4 hover:bg-white hover:text-indigo-600 flex justify-between gap-2 text-sm py-1 mx-1" style={focusStyle}>Shop</NavLink></li>
@@ -88,7 +127,15 @@ export default function Header() {
                         <ul className={`flex items-center ${textColor} justify-around leading-3 px-5 h-10 rounded-3xl`}>
                            <li className={`${isNavExpanded? 'flex':'hidden'} sm:flex`}>
         {isSearchExpanded ?(  <div className="bg-gray-50 dark:bg-slate-900/60 px-3 py-1 rounded-3xl border text-sm border-gray-200 flex items-center justify-between shadow-sm">
-              <input type="text" placeholder="Search..." onKeyDown={handleSearch} className="bg-gray-50 dark:bg-slate-900/60 focus:outline-none" />
+             <input
+              type="text"
+             placeholder="Search..."
+             value={searchValue}
+               onChange={(e) => setSearchValue(e.target.value)}
+             onKeyDown={handleSearch}
+              className="bg-gray-50 dark:bg-slate-900/60 focus:outline-none"
+            />
+              {/* <input type="text" placeholder="Search..." onKeyDown={handleSearch} className="bg-gray-50 dark:bg-slate-900/60 focus:outline-none" /> */}
              <button onClick={()=>setIsSearchExpanded(false)} className="size-8 text-sm hover:bg-white dark:hover:text-black rounded-full px-1 flex items-center justify-center"><X size={16} /></button>
        </div>):<button onClick={() => setIsSearchExpanded(true)} className=" flex items-center cursor-pointer hover:text-indigo-600 hover:bg-white justify-center p-3 mx-2 shadow-sm  rounded-full   bg-gray-50 "><Search size={16} className="dark:text-gray-800" /></button>}
       
@@ -98,11 +145,39 @@ export default function Header() {
                                     <span  className="text-sm">{isLight ? <Moon size={16}/> : <Sun size={16}/>} </span>
                                 </button>
                             </li>
-                            <li className={`flex items-center cursor-pointer hover:text-indigo-600 hover:bg-white justify-center p-2 size-8 mx-1 shadow-sm rounded-full ${bgSub}`}><NavLink to="/wishlist"><Heart size={16}/></NavLink></li>
-                            <li className={`flex items-center cursor-pointer hover:text-indigo-600 hover:bg-white justify-center p-2 size-8 mx-1 shadow-sm rounded-full ${bgSub}`}><NavLink to="/cart"><ShoppingCart size={16} /></NavLink></li>
-                            <li className={`hidden md:flex items-center cursor-pointer justify-center py-0 w-25 h-9 px-1 mx-1 rounded-full ${bgSub} shadow-sm hover:bg-white hover:text-indigo-600 flex justify-between gap-2 transition-all`}>
-                                <NavLink to="/profile" className='flex items-center justify-between gap-2 text-sm'><User size={18} /> Admin</NavLink>
-                            </li>
+                            {/* <li className={`flex items-center cursor-pointer hover:text-indigo-600 hover:bg-white justify-center p-2 size-8 mx-1 shadow-sm rounded-full ${bgSub}`}><NavLink to="/wishlist"><Heart size={16}/></NavLink></li> */}
+                            <li className={`flex items-center cursor-pointer hover:text-indigo-600 hover:bg-white justify-center p-2 size-8 mx-1 shadow-sm rounded-full ${bgSub}`}>
+                              <NavLink to="/wishlist" className="relative">
+                                   <Heart size={16} />
+                                   {wishlistCount > 0 && (
+                                      <span className="absolute -top-2 left-3 w-4 h-4 bg-red-500 text-white text-[8px] font-bold rounded-full flex items-center justify-center">  {wishlistCount} </span>
+                                    )}
+                              </NavLink>
+                           </li>
+                            {/* <li className={`flex items-center cursor-pointer hover:text-indigo-600 hover:bg-white justify-center p-2 size-8 mx-1 shadow-sm rounded-full ${bgSub}`}><NavLink to="/cart"><ShoppingCart size={16} /></NavLink></li> */}
+                            <li className={`relative flex items-center cursor-pointer hover:text-indigo-600 hover:bg-white justify-center p-2 size-8 mx-1 shadow-sm rounded-full ${bgSub}`}>
+                              <NavLink to="/cart">
+                                 <ShoppingCart size={16} />
+                                    {cartCount > 0 && (
+                                     <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">  {cartCount} </span>
+                                   )}
+                             </NavLink>
+                          </li>
+                            {/* <li className={`hidden md:flex items-center cursor-pointer justify-center py-0 w-25 h-9 px-1 mx-1 rounded-full ${bgSub} shadow-sm hover:bg-white hover:text-indigo-600 flex justify-between gap-2 transition-all`}> */}
+                            <li className={`hidden md:flex items-center cursor-pointer justify-center py-0 w-25 h-9 px-1 mx-1 rounded-full ${bgSub} shadow-sm hover:bg-white hover:text-indigo-600 transition-all`}>
+                              {token ? (
+                                  <NavLink   to="/profile"   className="flex items-center justify-between gap-2 text-sm">
+                                     <User size={18} />
+                                      {(user?.firstName || user?.name || user?.username)?.split(" ")[0]}
+                                 </NavLink>
+                                ) : (
+                                 <NavLink  to="/login" className="flex items-center justify-between gap-2 text-sm">
+                                     <User size={18} />  Login
+                                   </NavLink>
+                                )}
+                           </li>
+                                {/* <NavLink to="/profile" className='flex items-center justify-between gap-2 text-sm'><User size={18} /> Admin</NavLink> */}
+                            {/* </li> */}
                             <li className={`flex md:hidden items-center cursor-pointer hover:text-indigo-600 hover:bg-white justify-center p-2 size-8 mx-1 shadow-sm rounded-full ${bgSub}`}>
                                 <button onClick={toggleNav}><Menu size={16}/></button>
                             </li>
