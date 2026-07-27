@@ -3,29 +3,58 @@ import { Link } from "react-router-dom";
 import OrderSummaryCard from '../components/Cart/OrderSummaryCard';
 import CouponCard from '../components/Cart/CouponCard';
 import CartProductsCards from '../components/Cart/CartProductsCard'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import api from '../lib/api';
+import Loader from '../components/Loader';
+
 
 function CartPage(){
 
 const [cartProducts,setCardProducts]=useState([]);
+const [cartData,setCartData]=useState({})
+const [loading,setLoading]=useState(false)
 
+
+const fetchCartProducts = async () => {
+    try {
+        setLoading(true);
+        const cart = await api.get("/carts");
+        console.log(cart);
+        setCartData(cart.data)
+        setCardProducts(cart.data.items);
+    } catch (error) {
+        console.log(error.message);
+    } finally {
+        setLoading(false);
+    }
+};
+
+useEffect(() => {
+    const loadCartProducts = async () => {
+        await fetchCartProducts();
+    };
+
+    loadCartProducts();
+}, []);
 
 return(
-<div className='p-8'>
+    <div>
+    {loading ?(<Loader/>):(<div className='p-8'>
     <h2 className='font-bold text-3xl'>Shopping Cart</h2>
     <div className='flex flex-col md:flex-row  md:gap-2 justify-between  '>
         <div className='flex flex-col w-full md:w-[65%] gap-6 mt-10 md:mb-10'>
-        <CartProductsCards/>
-        <CouponCard/>
+        <CartProductsCards cartProducts={cartProducts} setCartProducts={setCardProducts} 
+    onUpdate={fetchCartProducts}/>
+        <CouponCard onUpdate={fetchCartProducts}/>
         </div>
        <div className='w-full md:w-[32%] mb-5'>
-         <OrderSummaryCard/>
+         <OrderSummaryCard cartData={cartData}/>
        </div>
   
     </div>
     <Link to='/products' className='flex items-center gap-2 hover:text-shadow-2xs text-indigo-600'><MoveLeft size={16}/> Continue Shopping</Link>
+</div>)}
 </div>
-
 );
 }
 export default CartPage;
