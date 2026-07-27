@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import api from "../../lib/api"
 import Loader from "../Loader";
-import { DeleteIcon, ShoppingBasket } from "lucide-react";
+
 import toast from "react-hot-toast";
 
 export default function WishListComponent(){
@@ -11,7 +11,12 @@ export default function WishListComponent(){
     const fetchWishlist=async()=>{
             try {
                 const response=await api.get("/wishlists/my");
-                setWishlistData(response.data.wishlist.products)
+                const products=await response.data.wishlist.products;
+                const uniqueProducts = products.filter(
+                (item, index, self) =>
+                    index === self.findIndex((p) => p._id === item._id)
+                );
+                setWishlistData(uniqueProducts);
             }catch(error){
                 console.log(error)
             }finally{
