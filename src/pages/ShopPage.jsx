@@ -84,6 +84,50 @@ function friendlyError(error) {
   return "We couldn't load the products. Please try again."
 }
 
+function getValidToken() {
+  if (typeof window === 'undefined') return null
+
+  const token = window.localStorage.getItem('token')
+  if (
+    token === null ||
+    token === undefined ||
+    token === '' ||
+    token === 'null' ||
+    token === 'undefined'
+  ) {
+    return null
+  }
+
+  return token
+}
+
+function wishlistIdsFrom(data) {
+  const products = Array.isArray(data?.wishlist?.products)
+    ? data.wishlist.products
+    : []
+
+  return new Set(
+    products
+      .map((product) =>
+        typeof product === 'string' ? product : product?._id,
+      )
+      .filter(Boolean),
+  )
+}
+
+function actionError(error, fallback) {
+  if (error?.response?.status === 401) {
+    return 'Please log in to continue.'
+  }
+  if (typeof error?.response?.data?.message === 'string') {
+    return error.response.data.message
+  }
+  if (error?.message === 'Network error please check your connection') {
+    return error.message
+  }
+  return fallback
+}
+
 function getActiveFilterChips(filters) {
   const formatPrice = (value) => {
     const number = Number(value)
@@ -114,10 +158,7 @@ function getActiveFilterChips(filters) {
 }
 
 function ShopPage({
-  onAddToCart,
   onProductSelect,
-  onToggleWishlist,
-  wishlistProductIds = [],
   pageSize = DEFAULT_PAGE_SIZE,
 }) {
   const limit =
@@ -142,8 +183,27 @@ function ShopPage({
   const [isBrandExpanded, setIsBrandExpanded] = useState(false)
   const [pendingCartId, setPendingCartId] = useState(null)
   const [cartFeedbackId, setCartFeedbackId] = useState(null)
-  const [localWishlistIds, setLocalWishlistIds] = useState([])
+  const [wishlistIds, setWishlistIds] = useState(() => new Set())
+  const [wishlistLoading, setWishlistLoading] = useState(
+    () => Boolean(getValidToken()),
+  )
+  const [pendingWishlistIds, setPendingWishlistIds] = useState(
+    () => new Set(),
+  )
+  const [actionFeedback, setActionFeedback] = useState(null)
   const cartFeedbackTimer = useRef(null)
+  const actionFeedbackTimer = useRef(null)
+  const cartRequestPending = useRef(false)
+  const wishlistRequestsPending = useRef(new Set())
+
+  const showActionFeedback = useCallback((type, message) => {
+    setActionFeedback({ type, message })
+    window.clearTimeout(actionFeedbackTimer.current)
+    actionFeedbackTimer.current = window.setTimeout(
+      () => setActionFeedback(null),
+      3000,
+    )
+  }, [])
 
   useEffect(() => {
     const timer = window.setTimeout(
@@ -204,6 +264,41 @@ function ShopPage({
   }, [currentPage, debouncedSearch, filters, limit, retryCount])
 
   useEffect(() => {
+    if (!getValidToken()) {
+      return undefined
+    }
+
+    const controller = new AbortController()
+
+    async function fetchWishlist() {
+      try {
+        const response = await api.get('/wishlists/my', {
+          signal: controller.signal,
+        })
+        if (!controller.signal.aborted) {
+          setWishlistIds(wishlistIdsFrom(response.data))
+        }
+      } catch (requestError) {
+        if (
+          controller.signal.aborted ||
+          requestError?.code === 'ERR_CANCELED'
+        ) {
+          return
+        }
+        showActionFeedback(
+          'error',
+          actionError(requestError, "We couldn't load your wishlist."),
+        )
+      } finally {
+        if (!controller.signal.aborted) setWishlistLoading(false)
+      }
+    }
+
+    fetchWishlist()
+    return () => controller.abort()
+  }, [showActionFeedback])
+
+  useEffect(() => {
     const closeOnEscape = (event) => {
       if (event.key === 'Escape') setIsFilterOpen(false)
     }
@@ -215,6 +310,9 @@ function ShopPage({
     () => () => {
       if (cartFeedbackTimer.current) {
         window.clearTimeout(cartFeedbackTimer.current)
+      }
+      if (actionFeedbackTimer.current) {
+        window.clearTimeout(actionFeedbackTimer.current)
       }
     },
     [],
@@ -260,45 +358,105 @@ function ShopPage({
 
   const addToCart = useCallback(
     async (product) => {
-      if (pendingCartId) return
+      if (cartRequestPending.current) return
+
+      if (!getValidToken()) {
+        showActionFeedback('error', 'Please log in to continue.')
+        return
+      }
+
+      cartRequestPending.current = true
       setPendingCartId(product._id)
+      setCartFeedbackId(null)
       try {
-        if (onAddToCart) {
-          await onAddToCart(product)
-        } else {
-          setCartFeedbackId(product._id)
-          window.clearTimeout(cartFeedbackTimer.current)
-          cartFeedbackTimer.current = window.setTimeout(
-            () => setCartFeedbackId(null),
-            1200,
-          )
-        }
-      } catch {
+        const response = await api.post('/carts/items', {
+          productId: product._id,
+          quantity: 1,
+        })
+        setCartFeedbackId(product._id)
+        window.clearTimeout(cartFeedbackTimer.current)
+        cartFeedbackTimer.current = window.setTimeout(
+          () => setCartFeedbackId(null),
+          1200,
+        )
+        showActionFeedback(
+          'success',
+          response.data?.message || `${product.name} added to cart.`,
+        )
+      } catch (requestError) {
         setCartFeedbackId(null)
+        showActionFeedback(
+          'error',
+          actionError(requestError, "We couldn't add this item to your cart."),
+        )
       } finally {
+        cartRequestPending.current = false
         setPendingCartId(null)
       }
     },
-    [onAddToCart, pendingCartId],
+    [showActionFeedback],
   )
 
   const toggleWishlist = useCallback(
-    (product) => {
-      if (onToggleWishlist) return onToggleWishlist(product)
-      setLocalWishlistIds((ids) =>
-        ids.includes(product._id)
-          ? ids.filter((id) => id !== product._id)
-          : [...ids, product._id],
-      )
+    async (product) => {
+      const productId = product._id
+      if (
+        wishlistLoading ||
+        wishlistRequestsPending.current.has(productId)
+      ) {
+        return
+      }
+
+      if (!getValidToken()) {
+        showActionFeedback('error', 'Please log in to continue.')
+        return
+      }
+
+      const isWishlisted = wishlistIds.has(productId)
+      wishlistRequestsPending.current.add(productId)
+      setPendingWishlistIds((ids) => new Set(ids).add(productId))
+
+      try {
+        const response = isWishlisted
+          ? await api.delete(`/wishlists/remove/${productId}`)
+          : await api.post(`/wishlists/add/${productId}`)
+
+        setWishlistIds(wishlistIdsFrom(response.data))
+        showActionFeedback(
+          'success',
+          response.data?.message ||
+            `${product.name} ${
+              isWishlisted ? 'removed from' : 'added to'
+            } wishlist.`,
+        )
+      } catch (requestError) {
+        showActionFeedback(
+          'error',
+          actionError(
+            requestError,
+            `We couldn't ${
+              isWishlisted ? 'remove' : 'add'
+            } this wishlist item.`,
+          ),
+        )
+      } finally {
+        wishlistRequestsPending.current.delete(productId)
+        setPendingWishlistIds((ids) => {
+          const nextIds = new Set(ids)
+          nextIds.delete(productId)
+          return nextIds
+        })
+      }
     },
-    [onToggleWishlist],
+    [
+      showActionFeedback,
+      wishlistIds,
+      wishlistLoading,
+    ],
   )
 
   const hasActiveFilters = Object.values(filters).some((value) => value !== '')
   const activeFilterChips = getActiveFilterChips(filters)
-  const visibleWishlistIds = onToggleWishlist
-    ? wishlistProductIds
-    : localWishlistIds
 
   return (
     <section className="shop-products-page" aria-label="Products shop">
@@ -324,6 +482,15 @@ function ShopPage({
             />
           )}
         </div>
+        {actionFeedback && (
+          <div
+            className={`shop-action-feedback is-${actionFeedback.type}`}
+            role={actionFeedback.type === 'error' ? 'alert' : 'status'}
+            aria-live={actionFeedback.type === 'error' ? 'assertive' : 'polite'}
+          >
+            {actionFeedback.message}
+          </div>
+        )}
         {activeFilterChips.length > 0 && (
           <div className="shop-active-filters" aria-label="Active product filters">
             {activeFilterChips.map((chip) => (
@@ -379,7 +546,9 @@ function ShopPage({
               onProductSelect={onProductSelect}
               onAddToCart={addToCart}
               onToggleWishlist={toggleWishlist}
-              wishlistProductIds={visibleWishlistIds}
+              wishlistProductIds={wishlistIds}
+              wishlistLoading={wishlistLoading}
+              pendingWishlistProductIds={pendingWishlistIds}
               currentPage={currentPage}
               totalPages={totalPages}
               onPageChange={changePage}
