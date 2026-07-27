@@ -29,6 +29,8 @@ function ProductsCards({
   onAddToCart,
   onToggleWishlist,
   wishlistProductIds = [],
+  wishlistLoading = false,
+  pendingWishlistProductIds = [],
   currentPage = 1,
   totalPages = 0,
   onPageChange,
@@ -80,6 +82,10 @@ function ProductsCards({
     wishlistProductIds instanceof Set
       ? wishlistProductIds
       : new Set(wishlistProductIds)
+  const pendingWishlistIds =
+    pendingWishlistProductIds instanceof Set
+      ? pendingWishlistProductIds
+      : new Set(pendingWishlistProductIds)
 
   return (
     <>
@@ -92,6 +98,9 @@ function ProductsCards({
             onProductSelect={onProductSelect}
             onToggleWishlist={onToggleWishlist}
             isWishlisted={wishlistIds.has(product._id)}
+            isWishlistPending={
+              wishlistLoading || pendingWishlistIds.has(product._id)
+            }
             isAdding={pendingCartProductId === product._id}
             wasAdded={cartFeedbackProductId === product._id}
           />

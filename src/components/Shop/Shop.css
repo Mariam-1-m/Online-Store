@@ -176,6 +176,15 @@
     border-color: color-mix(in srgb, var(--shop-danger) 45%, var(--shop-border));
     color: var(--shop-danger);
   }
+  .shop-wishlist-button:disabled { cursor: not-allowed; opacity: .55; }
+  .shop-action-feedback {
+    position: fixed; z-index: 60; top: 18px; right: 18px; width: min(380px, calc(100% - 36px));
+    padding: 11px 14px; border: 1px solid var(--shop-border); border-radius: 10px;
+    background: var(--shop-surface); box-shadow: 0 12px 30px rgb(15 23 42 / 18%);
+    color: var(--shop-text); font-size: 14px; line-height: 1.4;
+  }
+  .shop-action-feedback.is-success { border-color: #22c55e; }
+  .shop-action-feedback.is-error { border-color: var(--shop-danger); }
   .shop-stock-badge { position: absolute; right: 11px; bottom: 11px; background: rgb(31 36 48 / 78%); color: #fff; font-size: 11px; }
   .shop-product-content { display: flex; min-height: 170px; flex: 1; flex-direction: column; padding: 11px 13px 13px; }
   .shop-product-title {

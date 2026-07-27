@@ -16,6 +16,7 @@ function ProductCard({
   onProductSelect,
   onToggleWishlist,
   isWishlisted = false,
+  isWishlistPending = false,
   isAdding = false,
   wasAdded = false,
 }) {
@@ -60,6 +61,8 @@ function ProductCard({
               isWishlisted ? 'from' : 'to'
             } wishlist`}
             aria-pressed={isWishlisted}
+            aria-busy={isWishlistPending}
+            disabled={isWishlistPending}
           >
             <Heart
               aria-hidden="true"
