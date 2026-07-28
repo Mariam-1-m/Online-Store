@@ -11,6 +11,7 @@ export default function WishListComponent(){
     const fetchWishlist=async()=>{
             try {
                 const response=await api.get("/wishlists/my");
+                window.dispatchEvent(new Event("wishlistUpdated"));
                 const products=await response.data.wishlist.products;
                 const uniqueProducts = products.filter(
                 (item, index, self) =>
@@ -31,6 +32,7 @@ export default function WishListComponent(){
     const deleteItemFromWishlist=async(productId)=>{
         try{            
             const response =await api.delete(`/wishlists/remove/${productId}`)
+            window.dispatchEvent(new Event("wishlistUpdated"));
             console.log("product deleted from wishlist succsess")
             toast.success("product Deleted From Wishlist Successfully!")
             fetchWishlist();
@@ -46,6 +48,7 @@ export default function WishListComponent(){
                 productId:productId,
                 quantity:1
             })
+            window.dispatchEvent(new Event("cartUpdated"));
             console.log(response.data)
             toast.success("product added to cart Successfully")
         }catch(err){

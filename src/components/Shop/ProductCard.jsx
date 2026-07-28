@@ -1,5 +1,5 @@
 import { Heart, ShoppingCart, Star } from 'lucide-react'
-
+import { Link } from 'react-router-dom'
 const FALLBACK_IMAGE =
   "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='640' height='480' viewBox='0 0 640 480'%3E%3Crect width='640' height='480' fill='%23eef1f5'/%3E%3Cpath d='M238 179h164v122H238z' fill='%23d6dce5'/%3E%3Ccircle cx='283' cy='219' r='19' fill='%23eef1f5'/%3E%3Cpath d='m249 282 48-47 31 31 26-24 37 40z' fill='%23b9c2cf'/%3E%3C/svg%3E"
 
@@ -36,6 +36,7 @@ function ProductCard({
   return (
     <article className="shop-product-card">
       <div className="shop-product-image-wrap">
+        <Link to={`/products/${product._id}`}>
         <img
           className="shop-product-image"
           src={imageUrl || FALLBACK_IMAGE}
@@ -45,7 +46,7 @@ function ProductCard({
             event.currentTarget.onerror = null
             event.currentTarget.src = FALLBACK_IMAGE
           }}
-        />
+        /></Link>
         <div className="shop-card-badges">
           {product.category && (
             <span className="shop-category-badge">{product.category}</span>

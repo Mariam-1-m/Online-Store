@@ -11,7 +11,7 @@ function CartProdutsCard({ cartProducts, onUpdate }) {
                 productId: String(productId),
                 quantity: Number(newQuantity)
             });
-            
+            window.dispatchEvent(new Event("cartUpdated"));
             console.log('Updated successfully', response.data);
             
            
@@ -30,6 +30,7 @@ const deleteItem=async (itemId)=>{
          try{
     
       const response=await api.delete(`/carts/items/${itemId}`);
+      window.dispatchEvent(new Event("cartUpdated"));
      console.log('Item Deleted Successfully', response.data);
         if (onUpdate) {
                         onUpdate();

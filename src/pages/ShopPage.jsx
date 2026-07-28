@@ -28,6 +28,7 @@ function productsFrom(response) {
   return Array.isArray(response?.data?.products) ? response.data.products : []
 }
 async function loadFilterOptions() {
+
   if (filterOptionsRequest) return filterOptionsRequest
 
   filterOptionsRequest = (async () => {
@@ -163,7 +164,9 @@ function ShopPage({
   onProductSelect,
   pageSize = DEFAULT_PAGE_SIZE,
 }) {
+  
   const [searchParams] = useSearchParams();
+
   const limit =
     Number.isInteger(Number(pageSize)) && Number(pageSize) > 0
       ? Number(pageSize)
@@ -207,7 +210,12 @@ function ShopPage({
       3000,
     )
   }, [])
-
+  useEffect(()=>{
+    const searchValue=searchParams.get("search")||"";
+     setSearch(searchValue);
+     setDebouncedSearch(searchValue);
+  },[searchParams]
+  )
   useEffect(() => {
     const timer = window.setTimeout(
       () => setDebouncedSearch(search.trim()),
@@ -376,6 +384,9 @@ function ShopPage({
           productId: product._id,
           quantity: 1,
         })
+        window.dispatchEvent(
+        new Event("cartUpdated")
+    );
         setCartFeedbackId(product._id)
         window.clearTimeout(cartFeedbackTimer.current)
         cartFeedbackTimer.current = window.setTimeout(
@@ -386,6 +397,7 @@ function ShopPage({
           'success',
           response.data?.message || `${product.name} added to cart.`,
         )
+        
       } catch (requestError) {
         setCartFeedbackId(null)
         showActionFeedback(
@@ -423,7 +435,7 @@ function ShopPage({
         const response = isWishlisted
           ? await api.delete(`/wishlists/remove/${productId}`)
           : await api.post(`/wishlists/add/${productId}`)
-
+window.dispatchEvent(new Event("wishlistUpdated"));
         setWishlistIds(wishlistIdsFrom(response.data))
         showActionFeedback(
           'success',
@@ -487,7 +499,7 @@ function ShopPage({
         </div>
         {actionFeedback && (
           <div
-            className={`shop-action-feedback is-${actionFeedback.type}`}
+            className={`shop-action-feedback me-100 mt-12  is-${actionFeedback.type}`}
             role={actionFeedback.type === 'error' ? 'alert' : 'status'}
             aria-live={actionFeedback.type === 'error' ? 'assertive' : 'polite'}
           >
