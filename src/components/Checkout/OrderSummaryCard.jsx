@@ -1,12 +1,16 @@
+import { useContext } from "react";
+import { CartContext } from "../../context/CartContext";
 
 
-function OrderSummaryCard({ orderData, loading, errorMessage, handlePlaceOrder }) {
+function OrderSummaryCard({  loading, errorMessage, handlePlaceOrder }) {
+  const {cartItems,subtotal,total,discountAmount,shipping,coupon,tax}=useContext(CartContext);
+ const compuedTotal=Math.floor(total + (shipping === "Free" ? 0 : shipping)+(tax||0)) || "0.00"
     return (
      <div className="md:w-full w-full h-auto flex flex-col justify-between dark:bg-[#131b2e] gap-3 rounded-xl border border-slate-200 dark:border-[#23304a] bg-white/80 p-5 mt-13">
        <h3 className='flex items-center font-bold'>Order Summary</h3>
        
        <div className="w-full h-auto flex flex-col gap-2 max-h-48 overflow-y-auto">
-         {orderData?.items?.map((item, index) => (
+         {cartItems?.map((item, index) => (
            <div key={index} className="card flex justify-between p-2 items-center w-full">
              <div className="flex justify-between gap-3 items-center">
                <div>
@@ -31,23 +35,28 @@ function OrderSummaryCard({ orderData, loading, errorMessage, handlePlaceOrder }
        <div className="flex flex-col text-sm gap-1">
          <div className="flex justify-between p-1">
            <p>Subtotal</p>
-           <p>EGP {orderData?.subtotal ?? "0.00"}</p>
+           <p>EGP {subtotal||"00.0"}</p>
          </div>
-         <div className="flex justify-between p-1 text-green-500">
-           <p>Discount {orderData?.coupon ? `(${orderData.coupon})` : ''}</p>
-           <p>-EGP {orderData?.discountAmount ?? "0.00"}</p>
-         </div>
+         {(discountAmount!==0) && <div className="flex justify-between p-1 text-green-500">
+           <p>Discount <span className="text-xs">"{coupon || ""}"</span> </p>
+           <p>-EGP {discountAmount}</p>
+         </div>}
+       
          <div className="flex justify-between p-1">
            <p>Shipping</p>
-           <p>Calculated at checkout</p>
+           <p>{shipping}</p>
          </div>
+          <div className="flex justify-between p-1 text-base">
+         <p>Tax(14%)</p>
+         <p>EGP {Math.floor(tax)}</p>
+       </div>
        </div>
 
        <hr className="border-slate-200 dark:border-[#23304a]" />
 
        <div className="flex justify-between p-1 font-bold text-base">
          <p>Total</p>
-         <p>EGP {orderData?.total ?? "0.00"}</p>
+         <p>EGP {compuedTotal}</p>
        </div>
 
        {errorMessage && <p className="text-red-500 text-xs">{errorMessage}</p>}

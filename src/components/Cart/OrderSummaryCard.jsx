@@ -1,10 +1,14 @@
 import { Link, useNavigate } from "react-router-dom";
 import {MoveLeft} from 'lucide-react'
 import { useState } from 'react';
+import { CartContext } from "../../context/CartContext";
+import { useContext } from "react";
 
-function OrderSummaryCard({cartData}) {
+function OrderSummaryCard() {
   const navigate=useNavigate()
-  const [tax,setTax]=useState(cartData.total*0.14)
+  
+const {subtotal,discountAmount,total,shipping,tax}=useContext(CartContext);
+ const compuedTotal=Math.floor(total + (shipping === "Free" ? 0 : shipping)+(tax||0)) || "0.00"
 
 
     return (
@@ -15,15 +19,15 @@ function OrderSummaryCard({cartData}) {
        <div className="flex flex-col text-sm gap-1">
          <div className="flex justify-between p-1">
            <p>Subtotal</p>
-           <p>EGP {cartData.subtotal}</p>
+           <p>EGP {subtotal}</p>
          </div>
-         <div className="flex justify-between p-1 text-green-500">
+        {(discountAmount!==0) && <div className="flex justify-between p-1 text-green-500">
            <p>Discount </p>
-           <p>-EGP {cartData.discountAmount}</p>
-         </div>
+           <p>-EGP {discountAmount}</p>
+         </div>}
          <div className="flex justify-between p-1">
            <p>Shipping</p>
-           <p>Free</p>
+           <p>{shipping}</p>
          </div>
        </div>
  <div className="flex justify-between p-1 text-base">
@@ -34,7 +38,7 @@ function OrderSummaryCard({cartData}) {
 
        <div className="flex justify-between p-1 font-bold text-base">
          <p>Total</p>
-         <p>EGP {Math.floor(cartData.total+tax)}</p>
+         <p>EGP {compuedTotal}</p>
        </div>
 
        

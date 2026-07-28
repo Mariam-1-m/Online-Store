@@ -386,7 +386,7 @@ function ShopPage({
         })
         window.dispatchEvent(
         new Event("cartUpdated")
-    );
+        );
         setCartFeedbackId(product._id)
         window.clearTimeout(cartFeedbackTimer.current)
         cartFeedbackTimer.current = window.setTimeout(

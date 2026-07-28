@@ -1,53 +1,18 @@
 import { Trash2 } from 'lucide-react';
-import api from '../../lib/api';
 
-function CartProdutsCard({ cartProducts, onUpdate }) {
+import { CartContext } from '../../context/CartContext';
+import { useContext } from 'react';
+function CartProdutsCard() {
     
-    const updateitemQuantity = async (productId, newQuantity) => {
-        if (newQuantity < 1) return;
-        
-        try {
-            const response = await api.patch(`/carts/items`, {
-                productId: String(productId),
-                quantity: Number(newQuantity)
-            });
-            window.dispatchEvent(new Event("cartUpdated"));
-            console.log('Updated successfully', response.data);
-            
-           
-            if (onUpdate) {
-                onUpdate();
-            }
-        } catch (e) {
-            console.log("API Error:", e.response?.data || e.message);
-        }
-    };
+    const {cartItems,updateItemQuantity,removeFromCart }= useContext(CartContext)
 
 
-const deleteItem=async (itemId)=>{
-    const confirm=window.confirm("Do you want to delete this item from the cart? ")
-    if(confirm){
-         try{
-    
-      const response=await api.delete(`/carts/items/${itemId}`);
-      window.dispatchEvent(new Event("cartUpdated"));
-     console.log('Item Deleted Successfully', response.data);
-        if (onUpdate) {
-                        onUpdate();
-                    }
-    }catch(e){
-console.log(e.message);
-         }
-    }
-   
-
-}
 
 
 
     return (
         <div className="w-full h-auto p-5 bg-white/80 dark:bg-[#131b2e] border border-slate-200 dark:border-[#23304a] rounded-2xl flex flex-col gap-4">
-            {cartProducts.map((item) => {
+            {cartItems.map((item) => {
                 return (
                     <div key={item.product} className="productCard items-center justify-between gap-5 p-5 w-full flex border-b border-slate-200 dark:border-[#23304a] last:border-b-0">
                         <div className="rounded-2xl overflow-hidden">
@@ -61,14 +26,14 @@ console.log(e.message);
                                 
                                 <div className="flex gap-3">
                                     <button 
-                                        onClick={() => updateitemQuantity(item.product, item.quantity - 1)} 
+                                        onClick={() => updateItemQuantity (item.product, item.quantity - 1)} 
                                         className="flex items-center justify-center hover:bg-slate-100 dark:hover:bg-slate-700/90 p-2 size-8 bg-white/80 dark:bg-[#131b2e] border border-slate-200 dark:border-[#23304a] rounded-md cursor-pointer"
                                     >
                                         -
                                     </button>
                                     <span className="flex justify-center items-center">{item.quantity}</span>
                                     <button 
-                                        onClick={() => updateitemQuantity(item.product, item.quantity + 1)} 
+                                        onClick={() => updateItemQuantity (item.product, item.quantity + 1)} 
                                         className="flex items-center justify-center p-2 size-8 hover:bg-slate-100 dark:hover:bg-slate-700/90 bg-white/80 dark:bg-[#131b2e] border border-slate-200 dark:border-[#23304a] rounded-md cursor-pointer"
                                     >
                                         +
@@ -77,7 +42,7 @@ console.log(e.message);
                             </div>
                             
                             <div className="flex flex-col justify-between items-end h-full gap-4">
-                                <button onClick={()=>deleteItem(item.product)} className="text-slate-400 hover:text-red-500 cursor-pointer">
+                                <button onClick={()=>removeFromCart(item.product)} className="text-slate-400 hover:text-red-500 cursor-pointer">
                                     <Trash2 size={18} />
                                 </button>
                                 
