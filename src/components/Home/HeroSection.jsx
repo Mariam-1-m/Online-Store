@@ -1,14 +1,14 @@
-// import React from 'react'
+
 import { Sparkles } from 'lucide-react'
 
 export default function HeroSection() {
   return (
-   <div className="FeatureSection bg-[#4439CC] min-h-[75vh] flex items-center mt-[1.2%]">
-      <div className="container  text-white ml-[15%] px-4 py-12">
+   <div className="FeatureSection bg-[#4439CC] min-h-[90vh] flex items-center mt-[1.2%]">
+      <div className="container  text-white ml-[10%] px-4 py-12">
         <p className="FeatureText1 flex items-center gap-2 text-indigo-200 ">
           <Sparkles className="w-5 h-5" /> Premium Shopping Experience
         </p>
-        <h1 className="FeatureHeading text-5xl font-bold  mb-4">
+        <h1 className="FeatureHeading text-6xl font-bold  mb-4">
           Shop the future,<br /> delivered today
         </h1>
 

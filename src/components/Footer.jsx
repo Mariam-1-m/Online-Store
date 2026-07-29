@@ -6,11 +6,11 @@ import logoImage from "../assets/logo.png";
 
  function Footer() {
     return (
-        <div className="footer w-full min-h-60  p-4 bottom-0 bg-white/80 dark:bg-slate-900/90 border-t border-gray-300 flex flex-col   items-center justify-center">
+        <div className="footer w-full min-h-80  p-4 bottom-0 bg-white/80 dark:bg-slate-900/90 border-gray-300 dark:border-gray-500 border-t border-gray-300  flex flex-col   items-center justify-center">
        <div className="footerContent w-[95%] h-auto  lg:p-2  p-5 flex flex-col md:flex-row items-start md:items-center justify-center  ">
         <div className="leftSide   flex flex-col  items-start   pb-12  w-1/2 h-auto  text-left ">
 
-    <div className="logo rounded-2xl overflow-hidden text-2xl font-bold mb-5 text-indigo-600"><img src={logoImage} alt="" className="w-18 h-10 "/></div>
+    <div className="logo rounded-2xl overflow-hidden text-2xl font-bold mb-5 border text-indigo-600"><img src={logoImage} alt="" className="w-18 h-10 "/></div>
          <p className="text-gray-500 dark:text-gray-400 text-sm w-full md:w-[50%]">Shop the future, delivered today. Premium products at the best prices with fast delivery across Egypt.</p>
         </div>
 
