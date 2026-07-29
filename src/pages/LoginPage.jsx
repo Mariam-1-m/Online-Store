@@ -31,8 +31,8 @@ export default function LoginPage() {
     }
   };
   return (
-    <>
+    <div className="p-8" >
       <LoginForm onSubmit={onSubmit} loading={loading} />
-    </>
+    </div>
   );
 }

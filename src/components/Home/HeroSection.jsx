@@ -17,14 +17,14 @@ export default function HeroSection() {
         </p>
         <div className="container2 flex items-center gap-4">
           <a 
-            href="#" 
+            href="/products" 
             className="px-6 py-3 bg-white text-[#4439CC] font-semibold rounded-lg transition-all duration-300 hover:bg-slate-100 hover:shadow-lg active:scale-95 text-center"
           >
             Shop Now
           </a>
 
           <a 
-            href="#" 
+            href="#shopByCategory" 
             className="px-6 py-3 bg-transparent text-white font-medium rounded-xl border border-white/40 transition-all duration-300 hover:bg-white/10 hover:border-white/80 active:scale-95 text-center"
           >
             View Categories

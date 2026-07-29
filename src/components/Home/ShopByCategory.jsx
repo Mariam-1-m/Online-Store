@@ -1,4 +1,4 @@
-import React from "react";
+
 import { Zap, HouseWifi, Dumbbell, Shirt, Smartphone } from "lucide-react";
 
 export default function ShopByCategory({ products }) {
@@ -8,6 +8,7 @@ export default function ShopByCategory({ products }) {
     { name: "sports", count: 0, Icon: Dumbbell },
     { name: "fashion", count: 0, Icon: Shirt },
     { name: "phones", count: 0, Icon: Smartphone },
+    { name: "clothing", count: 0, Icon: Shirt }
   ];
 
   products.forEach(function (product) {
@@ -18,8 +19,9 @@ export default function ShopByCategory({ products }) {
     });
   });
 
+const filtEredCategories=categories.filter((cat)=>(cat.count!==0))
   return (
-    <div className="w-full flex flex-col items-center gap-8 py-8">
+    <div id="shopByCategory" className=" w-full flex flex-col items-center gap-8 py-12">
    
       <div className="text-center ">
         <h2 className="text-3xl font-bold">Shop by Category</h2>
@@ -28,7 +30,7 @@ export default function ShopByCategory({ products }) {
 
 
       <div className="w-full max-w-7xl mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 px-4">
-        {categories.map(function (cat, index) {
+        {filtEredCategories.map(function (cat, index) {
           const CategoryIcon = cat.Icon;
           return (
             <div

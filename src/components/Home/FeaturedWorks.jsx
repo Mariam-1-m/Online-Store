@@ -42,7 +42,7 @@ export default function FeaturedWorks({ products, wishlist, onToggleWishlist }) 
           <h2 className="text-3xl font-bold">Featured Products</h2>
           <p className="text-slate-400">Handpicked just for you</p>
         </div>
-        <a href="#" className="flex items-center gap-1 mr-1 text-indigo-400 font-medium hover:text-indigo-300">
+        <a href="/products" className="flex items-center gap-1 mr-1 text-indigo-400 font-medium hover:text-indigo-300">
           View All <ArrowRight size={18} />
         </a>
       </div>

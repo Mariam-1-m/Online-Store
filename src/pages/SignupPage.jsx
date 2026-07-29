@@ -27,8 +27,8 @@ export default function SignupPage() {
     }
     }
   return (
-    <>
+    <div className="p-8" >
       <SignupForm onSubmit={onSubmit} loading={loading}/>
-    </>
+    </div>
   );
 }
