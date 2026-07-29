@@ -1,13 +1,17 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import api from "../lib/api";
-
+import { useContext } from "react";
 import ProductInfo from "../components/ProductDetails/ProductInfo";
 import ProductTabs from "../components/ProductDetails/ProductTabs";
 import RelatedProducts from "../components/ProductDetails/RelatedProducts";
+import { CartContext } from "../context/CartContext";
+import toast from "react-hot-toast";
+import Loader from "../components/Loader";
 
 function ProductDetailsPage() {
     const { id } = useParams();
+    const {addToCart}=useContext(CartContext)
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState("description");
@@ -46,23 +50,6 @@ function ProductDetailsPage() {
         getRelatedProducts();
     }, [id]);
 
-    const handleAddToCart = async (targetIdOrEvent, customQuantity) => {
-        const targetId = typeof targetIdOrEvent === "string" ? targetIdOrEvent : product?._id;
-        const itemQuantity = typeof customQuantity === "number" ? customQuantity : quantity;
-
-        if (!targetId) return;
-
-        try {
-            await api.post("/carts/items", {
-                productId: targetId,
-                quantity: itemQuantity,
-            });
-            alert("Product added to cart");
-        } catch (error) {
-            console.log(error.response?.data);
-            alert("Error");
-        }
-    };
 
     const handleAddToWishlist = async (targetIdOrEvent) => {
         const targetId = typeof targetIdOrEvent === "string" ? targetIdOrEvent : product?._id;
@@ -71,10 +58,10 @@ function ProductDetailsPage() {
 
         try {
             await api.post(`/wishlists/add/${targetId}`);
-            alert("Added to wishlist");
+            toast.success("Added to wishlist");
         } catch (error) {
             console.log(error.response?.data || error);
-            alert("Failed");
+           toast.error("Failed");
         }
     };
     
@@ -88,14 +75,16 @@ function ProductDetailsPage() {
                 rating,
                 comment: review,
             });
-            alert("Review submitted successfully");
+            
+            toast.success("Review submitted successfully");
         } catch (error) {
-            console.log(error.response?.data);
+           console.log("Backend Error Details:", error.response?.data);
+    toast.error(error.response?.data?.message || "Failed to submit review");
         }
     };
 
     if (loading) {
-        return <h2 className="text-center mt-10">Loading...</h2>;
+        return <Loader/>;
     }
 
     return (
@@ -106,7 +95,7 @@ function ProductDetailsPage() {
                     product={product}
                     quantity={quantity}
                     setQuantity={setQuantity}
-                    handleAddToCart={handleAddToCart}
+                    handleAddToCart={()=>{addToCart(product._id,1)}}
                     handleAddToWishlist={handleAddToWishlist}
                 />
             </div>
@@ -126,7 +115,7 @@ function ProductDetailsPage() {
             <RelatedProducts
                 relatedProducts={relatedProducts}
                 handleWishlistItem={handleAddToWishlist}
-                handleAddToCartItem={(productId) => handleAddToCart(productId, 1)}
+                handleAddToCartItem={(productId) => addToCart(productId, 1)}
             />
         </section>
     );

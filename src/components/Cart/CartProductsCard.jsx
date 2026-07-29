@@ -1,10 +1,10 @@
-import { Trash2 } from 'lucide-react';
+import { Trash2,X } from 'lucide-react';
 
 import { CartContext } from '../../context/CartContext';
 import { useContext } from 'react';
 function CartProdutsCard() {
     
-    const {cartItems,updateItemQuantity,removeFromCart }= useContext(CartContext)
+    const {cartItems,updateItemQuantity,removeFromCart,clearCart }= useContext(CartContext)
 
 
 
@@ -52,6 +52,7 @@ function CartProdutsCard() {
                     </div>
                 );
             })}
+            <button onClick={clearCart} className='w-25 text-center flex items-center ml-auto hover:bg-red-100  gap-2  rounded-2xl px-5 py-2 text-red-500 border border-red-500'><X  className='text-red-500' size={16}/>Clear</button>
         </div>
     );
 }

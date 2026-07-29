@@ -499,7 +499,7 @@ window.dispatchEvent(new Event("wishlistUpdated"));
         </div>
         {actionFeedback && (
           <div
-            className={`shop-action-feedback me-100 mt-12  is-${actionFeedback.type}`}
+            className={`shop-action-feedback me-100 mt-12  text-center is-${actionFeedback.type}`}
             role={actionFeedback.type === 'error' ? 'alert' : 'status'}
             aria-live={actionFeedback.type === 'error' ? 'assertive' : 'polite'}
           >

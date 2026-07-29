@@ -152,7 +152,7 @@ export function CartProvider({ children }) {
             setCoupon(data.coupon || null);
             setTax(data.total*0.14||0);
             window.dispatchEvent(new Event("cartItemDeleted"));
-            fetchCart()
+            fetchCart();
         } catch (error) {
             console.error("Failed to remove item", error.response?.data || error.message);
         }
@@ -182,6 +182,20 @@ export function CartProvider({ children }) {
       console.error("Failed to remove coupon ",error.response?.data || error.message)
         }
     }
+
+    const clearCart=async ()=>{
+        try{
+         await api.delete("/carts/clear");
+        showToast("Cart Cleared!.", <Trash2 className="text-amber-400" size={20} />);
+       window.dispatchEvent(new Event("cartItemDeleted"));
+        await fetchCart();
+            setCoupon(null);
+        }catch(error){
+      console.error("Failed to clear Cart ",error.response?.data || error.message)
+        }
+    }
+
+
     return (
         <CartContext.Provider value={{
             cartData, 
@@ -199,7 +213,8 @@ export function CartProvider({ children }) {
             updateItemQuantity, 
             removeFromCart,
             applyCoupon,
-            removeCoupon
+            removeCoupon,
+            clearCart
         }}>
             {children}
         </CartContext.Provider>

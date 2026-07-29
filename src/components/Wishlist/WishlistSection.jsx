@@ -1,14 +1,17 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import api from "../../lib/api";
 import Loader from "../Loader";
-import {Trash2, Heart, ShoppingBag } from "lucide-react";
+import {Trash2, Heart, ShoppingBag, Car } from "lucide-react";
+
 import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
+import { CartContext } from './../../context/CartContext';
 
 export default function WishListComponent() {
   const [wishlistData, setWishlistData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [addtocartloading, setaddtocartloading] = useState(false);
+  const {addToCart}=useContext(CartContext)
   const fetchWishlist = async () => {
     try {
       const response = await api.get("/wishlists/my");
@@ -43,22 +46,7 @@ export default function WishListComponent() {
     }
   };
 
-  const addProductToCart = async (productId) => {
-    try {
-      setaddtocartloading(true);
-      const response = await api.post("/carts/items", {
-        productId: productId,
-        quantity: 1,
-      });
-      window.dispatchEvent(new Event("cartUpdated"));
-      console.log(response.data);
-      toast.success("product added to cart Successfully");
-    } catch (err) {
-      console.log(err);
-    } finally {
-      setaddtocartloading(false);
-    }
-  };
+
   if (loading) {
     return <Loader />;
   }
@@ -107,12 +95,13 @@ export default function WishListComponent() {
                 key={inx}
                 className="bg-white dark:bg-[#12162f] rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden"
               >
+                <Link to={`/products/${pro._id}`}>
                 <img
                   src={pro.images?.[0].url}
                   alt={pro.name}
                   className="w-full h-80 object-cover"
                 />
-
+              </Link>
                 <div className="p-4">
                   <h3 className="text-md font-medium text-slate-800 dark:text-white line-clamp-2 mb-2 hover:text-[#4f13f3] cursor-pointer">
                     {pro.name}
@@ -129,7 +118,7 @@ export default function WishListComponent() {
 
                   <div className="flex gap-2 mt-4">
                     <button
-                      onClick={() => addProductToCart(pro._id)}
+                      onClick={() => addToCart(pro._id)}
                       className="flex-1 py-2 bg-[#4f13f3] text-white text-sm font-medium rounded-lg hover:bg-[#3f0fd1] flex items-center justify-center gap-2"
                     >
                       <ShoppingBag size={16} />

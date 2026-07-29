@@ -132,8 +132,8 @@ useEffect(() => {
                     </div>
                 ) : (
                     <>
-                     <Link to="/">
-                        <img src={logoImage} alt="" className="w-18 h-12" />
+                     <Link to="/" className="border rounded-3xl overflow-hidden border-indigo-600">
+                        <img src={logoImage} alt="" className="w-20 h-12" />
                      </Link>
                         <ul className={`hidden md:flex items-center ${bgSub} shadow-sm px-3  py-2 rounded-3xl border ${borderColor}`}>
                             <li><NavLink to="/" className="rounded-full px-4 hover:bg-white hover:text-indigo-600 flex justify-between gap-2 text-sm py-1 mx-1" style={focusStyle}>Home</NavLink></li>

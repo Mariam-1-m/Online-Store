@@ -7,7 +7,7 @@ function RelatedProducts({
   handleAddToCartItem,
 }) {
   return (
-    <div className="mx-auto mt-12 w-[80%]">
+    <div className="mx-auto mt-12 w-[95%]">
       <h2 className="mb-6 text-3xl font-bold text-[var(--text-primary)]"> Related Products </h2>
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
         {relatedProducts.map((item) => (
@@ -15,14 +15,15 @@ function RelatedProducts({
             key={item._id}
             to={`/products/${item._id}`}
             className="group relative overflow-hidden rounded-2xl border border-[var(--border-main)] bg-[var(--bg-primary)] p-4 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
-            <span className="absolute left-3 top-3 rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-600"> {item.category} </span>
+            <span className="absolute left-3 top-3 z-3  rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-600"> {item.category} </span>
+           <span className={`absolute right-14 top-3 z-3  rounded-full ${item.discountPrice!==0?'flex':'hidden'} bg-red-100 px-4 py-1 text-xs font-semibold text-red-600`}> - {item.discountPrice} </span>
             <button
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
                 handleWishlistItem(item._id);
               }}
-              className="absolute right-3 top-3 rounded-full bg-white p-2 shadow transition hover:bg-red-100 hover:text-red-500">
+              className="absolute right-3 top-3 z-3 rounded-full bg-white p-2 shadow transition hover:bg-red-100 hover:text-red-500">
               <Heart size={18} />
             </button>
 
@@ -33,7 +34,7 @@ function RelatedProducts({
                 className="mx-auto h-44 object-contain transition-transform duration-300 group-hover:scale-110" />
             </div>
 
-            <h3 className="mt-4 text-lg font-semibold text-[var(--text-primary)]">  {item.name}  </h3>
+            <h3 className="mt-4 text-md font-semibold text-[var(--text-primary)]">  {item.name}  </h3>
             <p className="mt-1 text-sm text-gray-500">  {item.brand} </p>
             <div className="mt-3 flex items-center gap-1">
               {[1, 2, 3, 4, 5].map((star) => (

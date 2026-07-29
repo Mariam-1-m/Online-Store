@@ -11,7 +11,7 @@ function ProductTabs({
   handleSubmitReview,
 }) {
   return (
-    <div className="mx-auto mt-10 w-[80%] rounded-2xl border border-[var(--border-main)] bg-[var(--bg-primary)] p-8">
+    <div className="mx-auto mt-10 w-[95%] rounded-2xl border border-[var(--border-main)] bg-[var(--bg-primary)] p-8">
       {/* Tabs */}
       <div className="flex gap-8 border-b border-[var(--border-main)]">
         <button
@@ -68,7 +68,7 @@ function ProductTabs({
             className="mt-5 rounded-xl bg-blue-600 px-6 py-3 font-semibold text-white transition-all duration-300 hover:scale-105 hover:bg-blue-700 active:scale-95">
             Submit Review
           </button>
-          <p className="mt-6 text-center text-sm text-gray-400">  No reviews yet. Be the first to review this product. </p>
+          <p className={`mt-6 ${!review?"hidden":"block"} text-center text-sm text-gray-400`}>  No reviews yet. Be the first to review this product. </p>
         </div>
       )}
     </div>

@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import { Heart ,MessageCircle,Globe} from 'lucide-react';
 import logoImage from "../assets/logo.png";
-
+import { Link } from 'react-router-dom';
 
 
  function Footer() {
@@ -10,7 +10,10 @@ import logoImage from "../assets/logo.png";
        <div className="footerContent w-[95%] h-auto  lg:p-2  p-5 flex flex-col md:flex-row items-start md:items-center justify-center  ">
         <div className="leftSide   flex flex-col  items-start   pb-12  w-1/2 h-auto  text-left ">
 
-    <div className="logo rounded-2xl overflow-hidden text-2xl font-bold mb-5 border text-indigo-600"><img src={logoImage} alt="" className="w-18 h-10 "/></div>
+         <Link to="/" className="border rounded-3xl mb-6 mt-6 overflow-hidden border-indigo-600">
+                        <img src={logoImage} alt="" className="w-22 h-12 " />
+                     </Link>
+      
          <p className="text-gray-500 dark:text-gray-400 text-sm w-full md:w-[50%]">Shop the future, delivered today. Premium products at the best prices with fast delivery across Egypt.</p>
         </div>
 

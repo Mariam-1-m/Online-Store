@@ -178,8 +178,8 @@
   }
   .shop-wishlist-button:disabled { cursor: not-allowed; opacity: .55; }
   .shop-action-feedback {
-    position: fixed; z-index: 60; top: 18px; right: 18px; width: min(380px, calc(100% - 36px));
-    padding: 11px 14px; border: 1px solid var(--shop-border); border-radius: 10px;
+    position: fixed; z-index: 60; top: 18px; right: 50px; width: min(320px, calc(100% - 36px));
+    padding: 11px 0px; border: 1px solid var(--shop-border); border-radius: 10px;
     background: var(--shop-surface); box-shadow: 0 12px 30px rgb(15 23 42 / 18%);
     color: var(--shop-text); font-size: 14px; line-height: 1.4;
   }

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../lib/api";
 import { Mail, Phone } from "lucide-react";
-
+import Loader from "../Loader";
 export default function PersonalDataCard() {
   const navigate = useNavigate();
 
@@ -75,7 +75,7 @@ export default function PersonalDataCard() {
   };
 
   if (!user) {
-    return <h2 className="text-center text-xl">Loading...</h2>;
+    return <h2 className="text-center text-xl"><Loader/></h2>;
   }
 
   return (
