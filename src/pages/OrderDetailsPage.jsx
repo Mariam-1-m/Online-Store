@@ -78,9 +78,9 @@ export function OrderDetailsPage() {
               {order.status}
             </span>
           </div>
-
-          <OrderProgressCard orderStatus={order.status} />
-          <OrderItemCards items={order.items} />
+{order.status !== 'cancelled' && (
+  <OrderProgressCard orderStatus={order.status} />
+)}          <OrderItemCards items={order.items} />
           
           <div className="flex justify-between gap-2">
             <OrderShippingCard shippingAddress={order.shippingAddress} />

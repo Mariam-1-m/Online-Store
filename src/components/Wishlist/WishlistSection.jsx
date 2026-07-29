@@ -65,12 +65,11 @@ export default function WishListComponent() {
   return (
     <>
       <div className="max-w-7xl mx-auto px-4 py-8 animate-fade-in">
-        <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-200 mb-6">
-          My Wishlist
-        </h2>
-
         {wishlistData?.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-24 text-center rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#12162f]">
+          
+       
+        
+          <div className="flex flex-col items-center justify-center py-20 text-center rounded-2xl border border-slate-200 dark:border-slate-700  dark:bg-[#12162f]">
             <div className="w-20 h-20 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-6">
               <Heart
                 size={34}
@@ -97,6 +96,11 @@ export default function WishListComponent() {
             </Link>
           </div>
         ) : (
+          <div className="p-5">
+           <h2 className="text-3xl font-bold text-slate-800 dark:text-slate-200 mb-10">
+          My Wishlist
+        </h2>
+
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {wishlistData.map((pro, inx) => (
               <div
@@ -140,6 +144,7 @@ export default function WishListComponent() {
                 </div>
               </div>
             ))}
+          </div>
           </div>
         )}
       </div>
