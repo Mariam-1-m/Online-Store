@@ -1,13 +1,45 @@
-import React from "react";
+import { useContext, useState } from "react";
 import { Heart, ShoppingCart, ArrowRight } from "lucide-react";
+import { CartContext } from "../../context/CartContext";
+import api from "../../lib/api";
 
 export default function FeaturedWorks({ products, wishlist, onToggleWishlist }) {
+  const { addToCart } = useContext(CartContext);
+  const [loadingIds, setLoadingIds] = useState({});
+
+  const handleWishlistClick = async (productId) => {
+    const isInWishlist = wishlist[productId];
+
+    if (loadingIds[productId]) return;
+    setLoadingIds((prev) => ({ ...prev, [productId]: true }));
+
+    try {
+      if (isInWishlist) {
+        await api.delete(`/wishlists/remove/${productId}`);
+        window.dispatchEvent(new Event("wishlistItemDeleted"));
+        window.dispatchEvent(new Event("wishlistUpdated"));
+      } else {
+        
+        await api.post(`/wishlists/add/${productId}`);
+        window.dispatchEvent(new Event("wishlistUpdated"));
+      }
+
+     
+      if (onToggleWishlist) {
+        onToggleWishlist(productId);
+      }
+    } catch (error) {
+      console.error("Failed to update wishlist", error.response?.data || error.message);
+    } finally {
+      setLoadingIds((prev) => ({ ...prev, [productId]: false }));
+    }
+  };
+
   return (
     <div className="w-full flex flex-col items-center gap-6 py-6 px-4">
-    
       <div className="w-full max-w-7xl mx-auto flex items-center justify-between px-4">
         <div className="text-left">
-          <h2 className="text-3xl font-bold ">Featured Products</h2>
+          <h2 className="text-3xl font-bold">Featured Products</h2>
           <p className="text-slate-400">Handpicked just for you</p>
         </div>
         <a href="#" className="flex items-center gap-1 mr-1 text-indigo-400 font-medium hover:text-indigo-300">
@@ -15,7 +47,6 @@ export default function FeaturedWorks({ products, wishlist, onToggleWishlist }) 
         </a>
       </div>
 
-     
       <div className="w-full max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8 px-4">
         {products.map(function (product) {
           const isOutOfStock = product.stock === 0;
@@ -34,42 +65,42 @@ export default function FeaturedWorks({ products, wishlist, onToggleWishlist }) 
             "★".repeat(Math.round(product.averageRating || 0)) +
             "☆".repeat(5 - Math.round(product.averageRating || 0));
 
+          const isWishlisted = wishlist[product._id];
+
           return (
             <div
               key={product._id}
               style={{ height: "560px" }}
-              className="group relative dark:bg-[#131b2e] border-slate-200 dark:border-[#23304a] bg-slate-50 rounded-2xl flex flex-col overflow-hidden border-2  hover:border-indigo-500 transition-colors"
+              className="group relative dark:bg-[#131b2e] border-slate-200 dark:border-[#23304a] bg-slate-50 rounded-2xl flex flex-col overflow-hidden border-2 hover:border-indigo-500 transition-colors"
             >
-              
-              <div className="absolute top-3 left-3 bg-blue-500/50 group-hover:bg-blue-500/80 transition-colors  text-xs font-bold px-2.5 py-1 rounded-xl z-10">
+             
+              <div className="absolute top-3 left-3 bg-blue-500/50 group-hover:bg-blue-500/80 transition-colors text-xs font-bold px-2.5 py-1 rounded-xl z-10 text-white">
                 {product.category}
               </div>
 
-             
+          
               {hasDiscount && (
-                <div className="absolute top-3 right-12 bg-red-600/50 group-hover:bg-red-600/80 transition-colors  text-xs font-bold px-2.5 py-1 rounded-xl z-10">
+                <div className="absolute top-3 right-12 bg-red-600/50 group-hover:bg-red-600/80 transition-colors text-xs font-bold px-2.5 py-1 rounded-xl z-10 text-white">
                   -{discountPercent}%
                 </div>
               )}
 
-            
+             
               <button
-                onClick={function () {
-                  onToggleWishlist(product._id);
-                }}
-                disabled={isOutOfStock}
+                onClick={() => handleWishlistClick(product._id)}
+                disabled={isOutOfStock || loadingIds[product._id]}
                 className={`absolute top-3 right-3 dark:bg-[#131b2e] border-slate-200 dark:border-[#23304a] bg-white/80 rounded-full p-2 z-10 ${
                   isOutOfStock ? "cursor-not-allowed opacity-60" : ""
                 }`}
               >
                 <Heart
                   size={18}
-                  fill={wishlist[product._id] ? "currentColor" : "none"}
+                  fill={isWishlisted ? "currentColor" : "none"}
                   className={
                     isOutOfStock
                       ? "text-slate-400"
-                      : wishlist[product._id]
-                      ? "text-red-500/70"
+                      : isWishlisted
+                      ? "text-red-500"
                       : "text-slate-400"
                   }
                 />
@@ -86,17 +117,16 @@ export default function FeaturedWorks({ products, wishlist, onToggleWishlist }) 
                 {isOutOfStock && (
                   <>
                     <div className="absolute inset-0 bg-black/60"></div>
-                    <span className="absolute px-3 py-1 rounded-full bg-black/60 backdrop-blur-sm  text-xs font-bold z-10">
+                    <span className="absolute px-3 py-1 rounded-full bg-black/60 backdrop-blur-sm text-xs font-bold z-10 text-white">
                       Out of Stock
                     </span>
                   </>
                 )}
               </div>
 
-          
-              <div className="flex flex-col justify-between p-4 h-1/3 ">
+              <div className="flex flex-col justify-between p-4 h-1/3">
                 <div>
-                  <p className="font-medium text-base">{product.name}</p>
+                  <p className="font-medium text-base text-slate-900 dark:text-white">{product.name}</p>
                   <p className="text-xs text-amber-500 mt-1">
                     {ratingStars} ({product.numReviews || 0})
                   </p>
@@ -114,12 +144,15 @@ export default function FeaturedWorks({ products, wishlist, onToggleWishlist }) 
                 {isOutOfStock ? (
                   <button
                     disabled
-                    className="bg-slate-400  text-sm py-2 rounded-lg cursor-not-allowed flex items-center justify-center gap-1"
+                    className="bg-slate-400 text-sm py-2 rounded-lg cursor-not-allowed flex items-center justify-center gap-1 text-white"
                   >
                     <ShoppingCart size={16} /> Out of Stock
                   </button>
                 ) : (
-                  <button className="bg-indigo-600 text-white text-sm py-2 rounded-lg flex items-center justify-center gap-1">
+                  <button 
+                    onClick={() => addToCart(product._id)}
+                    className="bg-indigo-600 text-white text-sm py-2 rounded-lg flex items-center justify-center gap-1 hover:bg-indigo-500 transition-colors"
+                  >
                     <ShoppingCart size={16} /> Add to Cart
                   </button>
                 )}

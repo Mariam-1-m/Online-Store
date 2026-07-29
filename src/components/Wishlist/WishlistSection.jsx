@@ -35,6 +35,7 @@ export default function WishListComponent(){
             window.dispatchEvent(new Event("wishlistUpdated"));
             console.log("product deleted from wishlist succsess")
             toast.success("product Deleted From Wishlist Successfully!")
+            window.dispatchEvent(new Event("wishlistItemDeleted"));
             fetchWishlist();
         }catch(err){
             console.log(err)

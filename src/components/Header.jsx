@@ -65,7 +65,7 @@ export default function Header() {
         }
     };
 
-    useEffect(() => {
+useEffect(() => {
         if (token) {
             getWishlistCount();
             getCartCount();
@@ -73,13 +73,21 @@ export default function Header() {
 
         const handleCartUpdate = () => getCartCount();
         const handleWishlistUpdate = () => getWishlistCount();
+        
+        
+        const handleCartItemDeleted = () => getCartCount();
+        const handleWishlistItemDeleted = () => getWishlistCount();
 
         window.addEventListener("cartUpdated", handleCartUpdate);
         window.addEventListener("wishlistUpdated", handleWishlistUpdate);
+        window.addEventListener("cartItemDeleted", handleCartItemDeleted);
+        window.addEventListener("wishlistItemDeleted", handleWishlistItemDeleted);
 
         return () => {
             window.removeEventListener("cartUpdated", handleCartUpdate);
             window.removeEventListener("wishlistUpdated", handleWishlistUpdate);
+            window.removeEventListener("cartItemDeleted", handleCartItemDeleted);
+            window.removeEventListener("wishlistItemDeleted", handleWishlistItemDeleted);
         };
     }, [token]);
 

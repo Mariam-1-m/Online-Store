@@ -80,7 +80,7 @@ export function CartProvider({ children }) {
     
     const addToCart = async (productId, quantity = 1) => {
         try {
-            const response = await api.post('/carts', { productId, quantity });
+            const response = await api.post('/carts/items', { productId, quantity });
             const data = response.data;
             showToast("Item added to cart successfully!", <CheckCircle2 className="text-green-400" size={20} />);
             setCartItems(data.items || []);
@@ -95,6 +95,7 @@ export function CartProvider({ children }) {
             }
             setCoupon(data.coupon || null);
             setTax(data.total*0.14 || 0);
+            window.dispatchEvent(new Event("cartUpdated"));
             await fetchCart();
         } catch (error) {
             console.error("Failed to add to cart", error.response?.data || error.message);
@@ -150,6 +151,7 @@ export function CartProvider({ children }) {
             }
             setCoupon(data.coupon || null);
             setTax(data.total*0.14||0);
+            window.dispatchEvent(new Event("cartItemDeleted"));
             fetchCart()
         } catch (error) {
             console.error("Failed to remove item", error.response?.data || error.message);
