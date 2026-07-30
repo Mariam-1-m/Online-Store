@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import logoImage from "../assets/logo.png";
 import { Link } from "react-router-dom";
 import api from "../lib/api";
+import toast from "react-hot-toast";
 
 export default function Header() {
     const [isSearchExpanded, setIsSearchExpanded] = useState(false);
@@ -64,7 +65,12 @@ export default function Header() {
             console.log(err);
         }
     };
-
+ const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    toast.success("Logged out Successfully!");
+    navigate("/login");
+  };
 useEffect(() => {
         if (token) {
             getWishlistCount();
@@ -100,7 +106,7 @@ useEffect(() => {
                             <div className="flex">
                                 <div className="logo rounded-2xl overflow-hidden mr-3 text-2xl font-bold text-indigo-600"><img src={logoImage} alt="" className="w-18 h-12"/></div>
                                 <div className="flex flex-col justify-center text-left">
-                                    <h4 className="font-bold">eCommerc</h4>
+                                    <h4 className="font-bold">Lumina Store</h4>
                                     <p className="text-sm">Welcome</p>
                                 </div>
                             </div>
@@ -126,9 +132,9 @@ useEffect(() => {
                                 <li><NavLink to="/profile" className="hover:bg-white hover:text-indigo-600 flex justify-between gap-2 px-30 py-1" style={focusStyle}><CircleUserRound /> Profile</NavLink></li>
                             </ul>
                         </div>
-                        <NavLink to="/login" className="w-75 h-12 hover:bg-red-100 text-red-500 font-bold flex justify-center items-center rounded-2xl bg-red-50 m-auto border border-red-500 my-5">
+                        <button onClick={handleLogout} to="/login" className="w-75 h-12 hover:bg-red-100 text-red-500 font-bold flex justify-center items-center rounded-2xl bg-red-50 m-auto border border-red-500 my-5">
                            <LogOut size={18} className="mr-2"/> Log out 
-                        </NavLink>
+                        </button>
                     </div>
                 ) : (
                     <>

@@ -105,22 +105,9 @@ export default function VerifyOtp() {
   return (
     <div className="min-h-[80vh] flex flex-col justify-center">
       <div className="mb-8 text-center">
-        <div className="text-2xl font-bold flex items-center justify-center gap-2 text-violet-700 dark:text-blue-700 mb-2">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="lucide lucide-zap w-10 h-10"
-            aria-hidden="true"
-          >
-            <path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"></path>
-          </svg>
+        <div className="text-2xl font-bold flex items-center justify-center gap-2 text-indigo-700 dark:text-blue-700 mb-2">
+                 <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-origami-icon lucide-origami"><path d="M12 12V4a1 1 0 0 1 1-1h6.297a1 1 0 0 1 .651 1.759l-4.696 4.025"/><path d="m12 21-7.414-7.414A2 2 0 0 1 4 12.172V6.415a1.002 1.002 0 0 1 1.707-.707L20 20.009"/><path d="m12.214 3.381 8.414 14.966a1 1 0 0 1-.167 1.199l-1.168 1.163a1 1 0 0 1-.706.291H6.351a1 1 0 0 1-.625-.219L3.25 18.8a1 1 0 0 1 .631-1.781l4.165.027"/></svg>
+
         </div>
 
         <h1 className="text-xl font-semibold text-slate-800 dark:text-slate-200">
@@ -167,7 +154,7 @@ export default function VerifyOtp() {
                 }}
                 type="text"
                 maxLength={1}
-                className="w-12 h-15 font-bold text-xl text-center border focus:ring-2 focus:ring-violet-500 rounded-lg bg-white dark:bg-slate-900/90 border-gray-500/20 dark:border-slate-700"
+                className="w-12 h-15 font-bold text-xl text-center border focus:ring-2 focus:ring-indigo-500 rounded-lg bg-white dark:bg-slate-900/90 border-gray-500/20 dark:border-slate-700"
                 inputMode="numeric"
               />
             ))}
@@ -183,7 +170,7 @@ export default function VerifyOtp() {
                   required: "Password is required.",
                 })}
                 placeholder="Enter new password"
-                className="dark:bg-slate-900/90 w-full pl-4 pr-4 py-2.5 text-sm border rounded-lg bg-white text-slate-700 dark:text-slate-200 focus:outline-none dark:border-slate-600 border-gray-500/20 focus:ring-2 focus:ring-violet-500"
+                className="dark:bg-slate-900/90 w-full pl-4 pr-4 py-2.5 text-sm border rounded-lg bg-white text-slate-700 dark:text-slate-200 focus:outline-none dark:border-slate-600 border-gray-500/20 focus:ring-2 focus:ring-indigo-500"
                 type="password"
               />
             </div>
@@ -193,7 +180,7 @@ export default function VerifyOtp() {
         <button
           disabled={loading}
           type="submit"
-          className="inline-flex items-center justify-center font-medium rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed bg-violet-600 dark:bg-blue-800 text-white hover:bg-violet-700 dark:hover:bg-blue-900 dark:active:bg-blue-950 active:bg-violet-800 px-6 py-3 text-base w-full"
+          className="inline-flex items-center justify-center font-medium rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed bg-indigo-600 dark:bg-blue-800 text-white hover:bg-indigo-700 dark:hover:bg-blue-900 dark:active:bg-blue-950 active:bg-indigo-800 px-6 py-3 text-base w-full"
         >
           {loading ? (
             <div className="flex items-center gap-2.5">
@@ -211,7 +198,7 @@ export default function VerifyOtp() {
 
         <p className="text-center text-sm text-slate-500">
           Didn't receive the code?
-          <div className="text-violet-700 inline-block dark:text-blue-700 hover:text-violet-800 dark:hover:text-blue-800 font-medium">
+          <div className="text-indigo-700 inline-block dark:text-blue-700 hover:text-indigo-800 dark:hover:text-blue-800 font-medium">
             {time === 0 ? (
               <span className="ml-1" onClick={resend}>
                 Resend
