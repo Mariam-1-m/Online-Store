@@ -1,10 +1,14 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState,useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../lib/api";
 import { Mail, Phone } from "lucide-react";
 import Loader from "../Loader";
+import { CartContext } from "../../context/CartContext";
+
+
 export default function PersonalDataCard() {
   const navigate = useNavigate();
+  const { fetchCart } = useContext(CartContext);
 
   const [user, setUser] = useState(null);
   const [editing, setEditing] = useState(false);
@@ -67,13 +71,16 @@ export default function PersonalDataCard() {
     }
   };
 
-  const handleLogout = () => {
+const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
+    
+    window.dispatchEvent(new Event("userLoggedOut"));
+    window.dispatchEvent(new Event("wishlistUpdated"));
+    window.dispatchEvent(new Event("cartUpdated"));
 
     navigate("/login");
   };
-
   if (!user) {
     return <h2 className="text-center text-xl"><Loader/></h2>;
   }

@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+
+import { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import api from "../lib/api";
-import { useContext } from "react";
 import ProductInfo from "../components/ProductDetails/ProductInfo";
 import ProductTabs from "../components/ProductDetails/ProductTabs";
 import RelatedProducts from "../components/ProductDetails/RelatedProducts";
@@ -11,7 +11,7 @@ import Loader from "../components/Loader";
 
 function ProductDetailsPage() {
     const { id } = useParams();
-    const {addToCart}=useContext(CartContext)
+    const { addToCart } = useContext(CartContext);
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState("description");
@@ -19,7 +19,9 @@ function ProductDetailsPage() {
     const [quantity, setQuantity] = useState(1);
     const [relatedProducts, setRelatedProducts] = useState([]);
     const [review, setReview] = useState("");
+    const [wishlistIds, setWishlistIds] = useState([]);
 
+   
     useEffect(() => {
         const getProduct = async () => {
             try {
@@ -34,6 +36,7 @@ function ProductDetailsPage() {
         getProduct();
     }, [id]);
 
+  
     useEffect(() => {
         const getRelatedProducts = async () => {
             try {
@@ -50,18 +53,47 @@ function ProductDetailsPage() {
         getRelatedProducts();
     }, [id]);
 
+    useEffect(() => {
+        const fetchWishlistIds = async () => {
+            try {
+                const response = await api.get("/wishlists/my");
+                const products = response.data.wishlist?.products || [];
+                setWishlistIds(products.map((p) => p._id));
+            } catch (error) {
+                console.log(error);
+            }
+        };
+
+        fetchWishlistIds();
+
+        window.addEventListener("wishlistUpdated", fetchWishlistIds);
+        window.addEventListener("wishlistItemDeleted", fetchWishlistIds);
+
+        return () => {
+            window.removeEventListener("wishlistUpdated", fetchWishlistIds);
+            window.removeEventListener("wishlistItemDeleted", fetchWishlistIds);
+        };
+    }, []);
 
     const handleAddToWishlist = async (targetIdOrEvent) => {
         const targetId = typeof targetIdOrEvent === "string" ? targetIdOrEvent : product?._id;
 
         if (!targetId) return;
 
+        const isWishlisted = wishlistIds.includes(targetId);
+
         try {
-            await api.post(`/wishlists/add/${targetId}`);
-            toast.success("Added to wishlist");
+            if (isWishlisted) {
+                await api.delete(`/wishlists/remove/${targetId}`);
+                toast.success("Removed from wishlist");
+            } else {
+                await api.post(`/wishlists/add/${targetId}`);
+                toast.success("Added to wishlist");
+            }
+            window.dispatchEvent(new Event("wishlistUpdated"));
         } catch (error) {
             console.log(error.response?.data || error);
-           toast.error("Failed");
+            toast.error("Failed to update wishlist");
         }
     };
     
@@ -78,29 +110,28 @@ function ProductDetailsPage() {
             
             toast.success("Review submitted successfully");
         } catch (error) {
-           console.log("Backend Error Details:", error.response?.data);
-    toast.error(error.response?.data?.message || "Failed to submit review");
+            console.log("Backend Error Details:", error.response?.data);
+            toast.error(error.response?.data?.message || "Failed to submit review");
         }
     };
 
     if (loading) {
-        return <Loader/>;
+        return <Loader />;
     }
 
     return (
         <section className="min-h-screen bg-[var(--background)] py-10">
             <div className="mx-auto max-w-7xl px-4">
-               
                 <ProductInfo
                     product={product}
                     quantity={quantity}
                     setQuantity={setQuantity}
-                    handleAddToCart={()=>{addToCart(product._id,1)}}
+                    handleAddToCart={() => { addToCart(product._id, 1); }}
                     handleAddToWishlist={handleAddToWishlist}
+                    isWishlisted={wishlistIds.includes(product?._id)}
                 />
             </div>
             
-           
             <ProductTabs
                 activeTab={activeTab}
                 setActiveTab={setActiveTab}
@@ -116,6 +147,7 @@ function ProductDetailsPage() {
                 relatedProducts={relatedProducts}
                 handleWishlistItem={handleAddToWishlist}
                 handleAddToCartItem={(productId) => addToCart(productId, 1)}
+                wishlistIds={wishlistIds}
             />
         </section>
     );

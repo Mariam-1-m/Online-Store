@@ -2,7 +2,7 @@
 import { Mail } from 'lucide-react';
 export default function Subscribtion() {
   return (
-    <div className="SubscribtionSection  h-[80vh] flex flex-col items-center justify-center">
+    <div className="SubscribtionSection p-3 md:p-0 h-[80vh] flex flex-col items-center justify-center">
       
       <div className="SubscribtionContainer1 bg-[#463CD1]  w-[95%] h-[75%] p-25 flex flex-col items-center justify-center   rounded-3xl text-white">
         <div className="SubscribtionContainer2 flex flex-col items-center text-center ">
@@ -10,7 +10,7 @@ export default function Subscribtion() {
           <h3 className=" text-3xl font-bold  mt-5">Stay Updated</h3>
           <p className='dar:text-[#0c0e15] mt-5 '>Subscribe to our newsletter and get exclusive deals and <br /> new arrivals first.</p>
 
-          <div className="SubscribtionContainer3 flex gap-3 mt-10   w-full  h-13  max-w-md">
+          <div className="SubscribtionContainer3 flex gap-3 mt-10    md:w-full w-[90%]  h-13  max-w-md">
             <input
               type="email"
               placeholder="Enter your email"

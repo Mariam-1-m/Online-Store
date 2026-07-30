@@ -46,7 +46,7 @@
   .shop-products-page button, .shop-products-page input, .shop-products-page select { font: inherit; }
   .shop-products-page button { cursor: pointer; }
   .shop-products-page button:disabled { cursor: not-allowed; opacity: .58; }
-  .shop-products-page :focus-visible { outline: 3px solid color-mix(in srgb, var(--shop-primary) 55%, transparent); outline-offset: 2px; }
+  .shop-products-page :focus-visible { outline: 2px solid color-mix(in srgb, var(--shop-primary) 55%, transparent); outline-offset: 2px;border-radius:12px }
   .shop-shell { width: min(1340px, 100%); max-width: 100%; min-width: 0; margin: 0 auto; padding: 24px 20px 36px; }
   .shop-sr-only {
     position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden;

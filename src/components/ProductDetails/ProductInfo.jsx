@@ -1,3 +1,4 @@
+
 import { Star, Heart, ShoppingCart, Plus, Minus } from "lucide-react";
 
 function ProductInfo({
@@ -6,10 +7,11 @@ function ProductInfo({
   setQuantity,
   handleAddToCart,
   handleAddToWishlist,
+  isWishlisted,
 }) {
   return (
     <div className="grid grid-cols-1 gap-12 lg:grid-cols-2">
-      {/* Left Side */}
+   
       <div className="rounded-2xl border border-[var(--border-main)] bg-[var(--bg-primary)] p-6">
         <div className="flex h-[450px] items-center justify-center rounded-xl bg-[var(--background)] overflow-hidden">
           <img
@@ -20,7 +22,7 @@ function ProductInfo({
         </div>
       </div>
 
-      {/* Right Side */}
+    
       <div className="flex flex-col gap-3 rounded-2xl border border-[var(--border-main)] bg-[var(--bg-primary)] p-8">
         <div className="flex items-center gap-2 text-sm">
           <span className="font-semibold text-sky-500">{product?.brand}</span>
@@ -77,9 +79,13 @@ function ProductInfo({
 
           <button
             onClick={handleAddToWishlist}
-            className="rounded-xl border border-gray-300 p-3 hover:bg-red-100" >
+            className="rounded-xl border border-gray-300 p-3 hover:bg-red-100 transition" >
             <Heart
-              className="text-gray-500 hover:fill-red-500 hover:text-red-500"
+              className={
+                isWishlisted
+                  ? "fill-red-500 text-red-500"
+                  : "text-gray-500 hover:text-red-500"
+              }
               size={22}
             />
           </button>

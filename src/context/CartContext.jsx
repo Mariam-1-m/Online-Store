@@ -1,12 +1,12 @@
 import { createContext,  useState, useEffect } from 'react';
 import api from '../lib/api';
 import {CheckCircle2,Trash2,Tag}  from 'lucide-react'
-import { AuthContext } from './AuthContext';
-import toast, { Toaster } from 'react-hot-toast';
+
+import toast from 'react-hot-toast';
 export const CartContext = createContext();
 
 export function CartProvider({ children }) {
-    const token=localStorage.getItem("token");
+ const token=localStorage.getItem("token");
     const [cartData,setCartData]=useState({})
     const [cartItems, setCartItems] = useState([]);
     const [itemCount, setItemCount] = useState(0);
@@ -32,6 +32,7 @@ export function CartProvider({ children }) {
  
    
     const fetchCart = async () => {
+        const token=localStorage.getItem("token");
         if (!token) {
             setCartItems([]);
             setItemCount(0);
@@ -69,13 +70,33 @@ export function CartProvider({ children }) {
     }; 
 
  
-    useEffect(() => {
-        const getCart = async () => {
-            await fetchCart();
-        };
-        getCart();
-       
-    }, [token]);
+ useEffect(() => {
+    fetchCart();
+
+    const handleCartUpdate = () => fetchCart();
+    
+  
+    const handleLogout = () => {
+        setCartItems([]);
+        setItemCount(0);
+        setSubtotal(0);
+        setDiscountAmount(0);
+        setTotal(0);
+        setShipping(50);
+        setCoupon(null);
+        setTax(0);
+    };
+
+    window.addEventListener("cartUpdated", handleCartUpdate);
+    window.addEventListener("cartItemDeleted", handleCartUpdate);
+    window.addEventListener("userLoggedOut", handleLogout); 
+
+    return () => {
+        window.removeEventListener("cartUpdated", handleCartUpdate);
+        window.removeEventListener("cartItemDeleted", handleCartUpdate);
+        window.removeEventListener("userLoggedOut", handleLogout);
+    };
+}, []);
 
     
     const addToCart = async (productId, quantity = 1) => {
@@ -187,6 +208,14 @@ export function CartProvider({ children }) {
         try{
          await api.delete("/carts/clear");
         showToast("Cart Cleared!.", <Trash2 className="text-amber-400" size={20} />);
+        setCartItems([]);
+        setItemCount(0);
+        setSubtotal(0);
+        setDiscountAmount(0);
+        setTotal(0);
+        setShipping(50);
+        setCoupon(null);
+        setTax(0);
        window.dispatchEvent(new Event("cartItemDeleted"));
         await fetchCart();
             setCoupon(null);
@@ -194,6 +223,8 @@ export function CartProvider({ children }) {
       console.error("Failed to clear Cart ",error.response?.data || error.message)
         }
     }
+
+
 
 
     return (

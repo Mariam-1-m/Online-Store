@@ -65,37 +65,57 @@ export default function Header() {
             console.log(err);
         }
     };
- const handleLogout = () => {
+
+const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
+    
+   
+    setCartCount(0);
+    setWishlistCount(0);
+
     toast.success("Logged out Successfully!");
     navigate("/login");
   };
-useEffect(() => {
-        if (token) {
+
+  useEffect(() => {
+    const checkTokenAndFetch = () => {
+        const currentToken = localStorage.getItem("token");
+        if (currentToken) {
             getWishlistCount();
             getCartCount();
+        } else {
+            setWishlistCount(0);
+            setCartCount(0);
         }
+    };
 
-        const handleCartUpdate = () => getCartCount();
-        const handleWishlistUpdate = () => getWishlistCount();
-        
-        
-        const handleCartItemDeleted = () => getCartCount();
-        const handleWishlistItemDeleted = () => getWishlistCount();
+    checkTokenAndFetch();
 
-        window.addEventListener("cartUpdated", handleCartUpdate);
-        window.addEventListener("wishlistUpdated", handleWishlistUpdate);
-        window.addEventListener("cartItemDeleted", handleCartItemDeleted);
-        window.addEventListener("wishlistItemDeleted", handleWishlistItemDeleted);
+    const handleCartUpdate = () => getCartCount();
+    const handleWishlistUpdate = () => getWishlistCount();
+    const handleCartItemDeleted = () => getCartCount();
+    const handleWishlistItemDeleted = () => getWishlistCount();
+   
+    const handleUserLogout = () => {
+        setCartCount(0);
+        setWishlistCount(0);
+    };
 
-        return () => {
-            window.removeEventListener("cartUpdated", handleCartUpdate);
-            window.removeEventListener("wishlistUpdated", handleWishlistUpdate);
-            window.removeEventListener("cartItemDeleted", handleCartItemDeleted);
-            window.removeEventListener("wishlistItemDeleted", handleWishlistItemDeleted);
-        };
-    }, [token]);
+    window.addEventListener("cartUpdated", handleCartUpdate);
+    window.addEventListener("wishlistUpdated", handleWishlistUpdate);
+    window.addEventListener("cartItemDeleted", handleCartItemDeleted);
+    window.addEventListener("wishlistItemDeleted", handleWishlistItemDeleted);
+    window.addEventListener("userLoggedOut", handleUserLogout);
+
+    return () => {
+        window.removeEventListener("cartUpdated", handleCartUpdate);
+        window.removeEventListener("wishlistUpdated", handleWishlistUpdate);
+        window.removeEventListener("cartItemDeleted", handleCartItemDeleted);
+        window.removeEventListener("wishlistItemDeleted", handleWishlistItemDeleted);
+        window.removeEventListener("userLoggedOut", handleUserLogout);
+    };
+}, []);
 
     return (
         <div className={`header ${bgContainer} bg-white/80 dark:bg-slate-900/90 w-full h-16 px-2 z-50 inset-0 fixed top-0 ${textColor} border-b ${borderColor} flex items-center justify-center`}>
@@ -106,7 +126,7 @@ useEffect(() => {
                             <div className="flex">
                                 <div className="logo rounded-2xl overflow-hidden mr-3 text-2xl font-bold text-indigo-600"><img src={logoImage} alt="" className="w-18 h-12"/></div>
                                 <div className="flex flex-col justify-center text-left">
-                                    <h4 className="font-bold">Lumina Store</h4>
+                                    <h4 className="font-bold">Lumina </h4>
                                     <p className="text-sm">Welcome</p>
                                 </div>
                             </div>

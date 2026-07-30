@@ -21,6 +21,9 @@ export default function LoginPage() {
       const res = await axios.post("/auth/login", data);
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user));
+    
+      window.dispatchEvent(new Event("cartUpdated"));
+      window.dispatchEvent(new Event("wishlistUpdated"));
       toast.success("Logged in successfully");
       navigate(from, {replace: true});
     } catch (err) {

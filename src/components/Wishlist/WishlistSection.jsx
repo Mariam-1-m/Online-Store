@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import api from "../../lib/api";
 import Loader from "../Loader";
-import {Trash2, Heart, ShoppingBag, Car } from "lucide-react";
+import {Trash2, Heart, ShoppingBag} from "lucide-react";
 
 import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
